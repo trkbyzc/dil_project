@@ -1,0 +1,323 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - İngilizce Öğrenme Platformu{% endblock %}
+
+{% block content %}
+<div class="header">
+    <div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">İngilizce öğrenme yolculuğunuza genel bakış</p>
+    </div>
+    <div class="header-actions">
+        <button class="btn btn-secondary">
+            <i class="fas fa-calendar"></i>
+            Bugün
+        </button>
+        <a href="{% url 'games' %}" class="btn btn-primary">
+            <i class="fas fa-play"></i>
+            Hızlı Oyun
+        </a>
+    </div>
+</div>
+
+<!-- Kullanıcı Bilgileri -->
+<div class="user-info-card">
+    <div class="user-info-header">
+        <div class="user-info-icon">
+            <i class="fas fa-user-circle"></i>
+        </div>
+        <div class="user-info-content">
+            <h3>{{ user.username }}</h3>
+            <div class="user-details">
+                <span class="user-code">Kod: {{ profile.unique_code }}</span>
+                {% if profile.learning_purpose %}
+                <span class="user-purpose">Amaç: {{ profile.get_learning_purpose_display }}</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- İstatistik Kartları -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-header">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <div>
+                <div class="stat-title">Toplam Puan</div>
+                <div class="stat-value">{{ profile.total_score|default:"0" }}</div>
+                <div class="stat-change positive">+{{ weekly_score_increase|default:"0" }} bu hafta</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-header">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                <i class="fas fa-bullseye"></i>
+            </div>
+            <div>
+                <div class="stat-title">Oynanan Oyun</div>
+                <div class="stat-value">{{ profile.games_played|default:"0" }}</div>
+                <div class="stat-change positive">+{{ weekly_games_count|default:"0" }} bu hafta</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-header">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div>
+                <div class="stat-title">Ortalama Puan</div>
+                <div class="stat-value">{{ profile.average_score|default:"0" }}</div>
+                <div class="stat-change positive">+8% artış</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-header">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                <i class="fas fa-fire"></i>
+            </div>
+            <div>
+                <div class="stat-title">Günlük Seri</div>
+                <div class="stat-value">{{ profile.daily_streak|default:"0" }} Gün</div>
+                <div class="stat-change" style="color: #f59e0b;">Devam ediyor!</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ana İçerik Grid -->
+<div class="content-grid">
+    <!-- Sol Taraf - Seviye ve Beceriler -->
+    <div class="main-card">
+        <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="card-title">Seviyem</div>
+        </div>
+
+        <div style="margin-bottom: 30px;">
+            <h3 style="font-size: 24px; font-weight: 700; color: #1e293b; margin-bottom: 10px;">
+                {{ profile.level|title }} Seviye
+            </h3>
+            <p style="color: #64748b; margin-bottom: 20px;">Seviye {{ profile.level_number }}</p>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>{{ profile.current_xp|default:"0" }} XP</span>
+                    <span>{{ profile.xp_to_next_level|default:"1000" }} XP</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {% widthratio profile.current_xp profile.xp_to_next_level 100 %}%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                </div>
+            </div>
+            
+            <p style="color: #64748b; font-size: 14px; margin-top: 10px;">
+                {% if profile.level == 'başlangıç' %}
+                    Orta Seviye seviyesine {{ profile.xp_to_next_level|add:"-"|add:profile.current_xp }} XP kaldı
+                {% elif profile.level == 'orta' %}
+                    İleri Seviye seviyesine {{ profile.xp_to_next_level|add:"-"|add:profile.current_xp }} XP kaldı
+                {% elif profile.level == 'ileri' %}
+                    Uzman Seviye seviyesine {{ profile.xp_to_next_level|add:"-"|add:profile.current_xp }} XP kaldı
+                {% else %}
+                    Maksimum seviyeye ulaştınız!
+                {% endif %}
+            </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+                <h4 style="font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 15px;">Toplam XP</h4>
+                <p style="font-size: 24px; font-weight: 700; color: #667eea;">{{ profile.total_xp|default:"0" }}</p>
+            </div>
+            <div>
+                <h4 style="font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 15px;">Hedef XP</h4>
+                <p style="font-size: 24px; font-weight: 700; color: #64748b;">{{ profile.xp_to_next_level|default:"1000" }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sağ Taraf - Son Aktiviteler -->
+    <div class="main-card">
+        <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <div class="card-title">Son Aktiviteler</div>
+        </div>
+
+        <ul class="activity-list">
+            {% for activity in recent_activities %}
+            <li class="activity-item">
+                <div class="activity-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">{{ activity.get_game_type_display }}</div>
+                    <div class="activity-time">
+                        {% if activity.played_at|date:"Y-m-d" == "now"|date:"Y-m-d" %}
+                            Bugün
+                        {% else %}
+                            {{ activity.played_at|timesince }} önce
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="activity-score">
+                    <div class="score-value">{{ activity.score }}</div>
+                    <div class="xp-gained">+{{ activity.xp_gained }} XP</div>
+                </div>
+            </li>
+            {% empty %}
+            <li class="activity-item">
+                <div style="text-align: center; color: #64748b; width: 100%;">
+                    Henüz aktivite yok. İlk oyununuzu oynayın!
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<!-- Beceri İlerlemesi -->
+<div style="margin-top: 30px;">
+    <h3 style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 20px;">Beceri İlerlemesi</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Kelime Bilgisi</div>
+                    <div class="stat-value">{{ profile.vocabulary_progress|default:"0" }}%</div>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ profile.vocabulary_progress|default:0 }}%; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);"></div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Gramer</div>
+                    <div class="stat-value">{{ profile.grammar_progress|default:"0" }}%</div>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ profile.grammar_progress|default:0 }}%; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);"></div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    <i class="fas fa-microphone"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Telaffuz</div>
+                    <div class="stat-value">{{ profile.pronunciation_progress|default:"0" }}%</div>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ profile.pronunciation_progress|default:0 }}%; background: linear-gradient(135deg, #10b981 0%, #059669 100%);"></div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Çeviri</div>
+                    <div class="stat-value">{{ profile.translation_progress|default:"0" }}%</div>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ profile.translation_progress|default:0 }}%; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.user-info-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.user-info-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.user-info-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+}
+
+.user-info-content h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.user-details {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.user-code,
+.user-purpose {
+    background: #f1f5f9;
+    color: #64748b;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.user-code {
+    background: #eff6ff;
+    color: #3b82f6;
+}
+
+.user-purpose {
+    background: #f0fdf4;
+    color: #16a34a;
+}
+
+@media (max-width: 768px) {
+    .user-details {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+</style>
+{% endblock %} 

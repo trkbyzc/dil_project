@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pronunciation Master - Voice Challenge</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+:root {--primary-color: #6366f1;--primary-dark: #4f46e5;--primary-light: #818cf8;--secondary-color: #f59e0b;--success-color: #10b981;--error-color: #ef4444;--text-primary: #1f2937;--text-secondary: #6b7280;--text-light: #9ca3af;--bg-primary: #ffffff;--bg-secondary: #f9fafb;--bg-tertiary: #f3f4f6;--border-color: #e5e7eb;--shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);--shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);--shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);--radius-sm: 0.375rem;--radius-lg: 0.75rem;--radius-xl: 1rem;--radius-2xl: 1.5rem;}
+* {margin: 0;padding: 0;box-sizing: border-box;}
+body {font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);min-height: 100vh;color: var(--text-primary);overflow-x: hidden;position: relative;}
+.background-animation {position: fixed;top: 0;left: 0;width: 100%;height: 100%;z-index: -2;background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);}
+.floating-shapes {position: absolute;width: 100%;height: 100%;overflow: hidden;}
+.shape {position: absolute;background: rgba(255, 255, 255, 0.1);border-radius: 50%;animation: float 20s infinite linear;}
+.shape-1 {width: 80px;height: 80px;left: 10%;animation-delay: 0s;}
+.shape-2 {width: 120px;height: 120px;left: 20%;animation-delay: 2s;}
+.shape-3 {width: 60px;height: 60px;left: 70%;animation-delay: 4s;}
+.shape-4 {width: 100px;height: 100px;left: 80%;animation-delay: 6s;}
+.shape-5 {width: 140px;height: 140px;left: 50%;animation-delay: 8s;}
+@keyframes float {0% {transform: translateY(100vh) rotate(0deg);opacity: 0;}10% {opacity: 1;}90% {opacity: 1;}100% {transform: translateY(-100px) rotate(360deg);opacity: 0;}}
+.floating-particles {position: fixed;top: 0;left: 0;width: 100%;height: 100%;pointer-events: none;z-index: -1;}
+.particle {position: absolute;width: 4px;height: 4px;background: rgba(255, 255, 255, 0.6);border-radius: 50%;animation: particle-float 15s infinite linear;}
+.particle:nth-child(1) {left: 20%;animation-delay: 0s;}
+.particle:nth-child(2) {left: 40%;animation-delay: 3s;}
+.particle:nth-child(3) {left: 60%;animation-delay: 6s;}
+.particle:nth-child(4) {left: 80%;animation-delay: 9s;}
+.particle:nth-child(5) {left: 90%;animation-delay: 12s;}
+@keyframes particle-float {0% {transform: translateY(100vh);opacity: 0;}10% {opacity: 1;}90% {opacity: 1;}100% {transform: translateY(-10px);opacity: 0;}}
+.container {max-width: 1200px;margin: 0 auto;padding: 2rem 1rem;position: relative;z-index: 1;}
+.main-header {text-align: center;margin-bottom: 3rem;animation: slideInDown 0.8s ease-out;}
+.logo-container {display: flex;align-items: center;justify-content: center;gap: 1rem;margin-bottom: 1rem;}
+.logo-icon {width: 80px;height: 80px;background: rgba(255, 255, 255, 0.2);border-radius: var(--radius-2xl);display: flex;align-items: center;justify-content: center;backdrop-filter: blur(10px);border: 1px solid rgba(255, 255, 255, 0.3);}
+.logo-icon .material-icons {font-size: 2.5rem;color: white;}
+.title-group h1 {font-family: "Poppins", sans-serif;font-size: 3.5rem;font-weight: 800;color: white;text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);margin: 0;letter-spacing: -0.02em;}
+.title-group p {font-size: 1.25rem;color: rgba(255, 255, 255, 0.9);font-weight: 500;margin: 0.5rem 0 0 0;}
+.modern-card {background: rgba(255, 255, 255, 0.95);backdrop-filter: blur(20px);border-radius: var(--radius-2xl);border: 1px solid rgba(255, 255, 255, 0.2);box-shadow: var(--shadow-xl);padding: 2rem;margin-bottom: 2rem;animation: slideInUp 0.8s ease-out;}
+.level-select {max-width: 600px;margin: 0 auto 2rem auto;}
+.card-header {text-align: center;margin-bottom: 2rem;}
+.card-header h2 {font-family: "Poppins", sans-serif;font-size: 2rem;font-weight: 700;color: var(--text-primary);margin-bottom: 0.5rem;}
+.card-header p {color: var(--text-secondary);font-size: 1.1rem;}
+.level-options {display: flex;flex-direction: column;gap: 1rem;margin-bottom: 2rem;}
+.level-option input[type="radio"] {display: none;}
+.level-option label {display: flex;align-items: center;gap: 1rem;padding: 1.5rem;border: 2px solid var(--border-color);border-radius: var(--radius-xl);cursor: pointer;transition: all 0.3s ease;background: var(--bg-primary);}
+.level-option label:hover {border-color: var(--primary-light);transform: translateY(-2px);box-shadow: var(--shadow-lg);}
+.level-option input[type="radio"]:checked + label {border-color: var(--primary-color);background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);color: white;transform: translateY(-2px);box-shadow: var(--shadow-lg);}
+.level-icon {width: 60px;height: 60px;border-radius: var(--radius-lg);display: flex;align-items: center;justify-content: center;background: var(--bg-secondary);transition: all 0.3s ease;}
+.level-option input[type="radio"]:checked + label .level-icon {background: rgba(255, 255, 255, 0.2);}
+.level-icon .material-icons {font-size: 1.8rem;color: var(--primary-color);}
+.level-option input[type="radio"]:checked + label .level-icon .material-icons {color: white;}
+.level-info {flex: 1;}
+.level-info h3 {font-family: "Poppins", sans-serif;font-size: 1.25rem;font-weight: 600;margin-bottom: 0.25rem;}
+.level-info span {color: var(--text-secondary);font-size: 0.9rem;font-weight: 500;}
+.level-option input[type="radio"]:checked + label .level-info span {color: rgba(255, 255, 255, 0.8);}
+.level-description {font-size: 0.85rem;color: var(--text-light);margin-top: 0.25rem;}
+.level-option input[type="radio"]:checked + label .level-description {color: rgba(255, 255, 255, 0.7);}
+.level-stats {display: flex;flex-direction: column;gap: 0.5rem;}
+.stat {display: flex;align-items: center;gap: 0.5rem;font-size: 0.9rem;color: var(--text-secondary);}
+.level-option input[type="radio"]:checked + label .stat {color: rgba(255, 255, 255, 0.8);}
+.stat .material-icons {font-size: 1.2rem;}
+.start-button {width: 100%;padding: 1rem 2rem;background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);color: white;border: none;border-radius: var(--radius-xl);font-size: 1.1rem;font-weight: 600;cursor: pointer;transition: all 0.3s ease;display: flex;align-items: center;justify-content: center;gap: 0.5rem;box-shadow: var(--shadow-md);}
+.start-button:hover {transform: translateY(-2px);box-shadow: var(--shadow-lg);background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);}
+.game-section {display: none;max-width: 800px;margin: 0 auto;}
+.game-header {display: flex;justify-content: space-between;align-items: center;margin-bottom: 2rem;flex-wrap: wrap;gap: 1rem;}
+.progress-container {flex: 1;min-width: 200px;}
+.progress-bar {width: 100%;height: 8px;background: var(--bg-tertiary);border-radius: var(--radius-sm);overflow: hidden;margin-bottom: 0.5rem;}
+.progress-fill {height: 100%;background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-light) 100%);border-radius: var(--radius-sm);transition: width 0.3s ease;width: 20%;}
+.progress-text {font-size: 0.9rem;color: var(--text-secondary);font-weight: 500;}
+.game-stats {display: flex;gap: 1rem;}
+.stat-item {display: flex;align-items: center;gap: 0.75rem;padding: 0.75rem 1rem;background: var(--bg-secondary);border-radius: var(--radius-lg);border: 1px solid var(--border-color);}
+.stat-item .material-icons {font-size: 1.5rem;color: var(--primary-color);}
+.stat-info {display: flex;flex-direction: column;}
+.stat-value {font-size: 1.25rem;font-weight: 700;color: var(--text-primary);}
+.stat-label {font-size: 0.75rem;color: var(--text-secondary);text-transform: uppercase;letter-spacing: 0.05em;}
+.timer-stat {position: relative;}
+.timer-ring {position: absolute;top: -5px;right: -5px;width: 50px;height: 50px;}
+.timer-svg {width: 100%;height: 100%;transform: rotate(-90deg);}
+.timer-circle-bg {fill: none;stroke: var(--bg-tertiary);stroke-width: 4;}
+.timer-circle {fill: none;stroke: var(--primary-color);stroke-width: 4;stroke-linecap: round;stroke-dasharray: 283;stroke-dashoffset: 283;transition: stroke-dashoffset 1s linear;}
+.sentence-display-container {text-align: center;margin-bottom: 2rem;}
+.sentence-card {background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);border: 2px solid var(--border-color);border-radius: var(--radius-2xl);padding: 2rem;margin-bottom: 1rem;transition: all 0.3s ease;}
+.sentence-label {font-size: 1rem;color: var(--text-secondary);margin-bottom: 1rem;font-weight: 500;}
+.turkish-sentence {font-family: "Poppins", sans-serif;font-size: 1.5rem;font-weight: 600;color: var(--text-primary);line-height: 1.4;letter-spacing: -0.01em;margin-bottom: 1rem;}
+.expected-sentence {font-family: "Poppins", sans-serif;font-size: 1.25rem;font-weight: 500;color: var(--text-light);font-style: italic;line-height: 1.4;}
+.voice-controls {display: flex;justify-content: center;margin-bottom: 2rem;}
+.voice-button {position: relative;padding: 1.5rem 2rem;background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);color: white;border: none;border-radius: var(--radius-xl);font-size: 1.1rem;font-weight: 600;cursor: pointer;transition: all 0.3s ease;display: flex;align-items: center;gap: 0.75rem;box-shadow: var(--shadow-md);overflow: hidden;}
+.voice-button:hover {transform: translateY(-2px);box-shadow: var(--shadow-lg);background: linear-gradient(135deg, #059669 0%, var(--success-color) 100%);}
+.voice-button:active {transform: translateY(0);}
+.voice-button.listening {background: linear-gradient(135deg, var(--error-color) 0%, #dc2626 100%);animation: pulse 1.5s infinite;}
+.voice-animation {position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);width: 100%;height: 100%;background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);border-radius: var(--radius-xl);opacity: 0;transition: opacity 0.3s ease;}
+.voice-button.listening .voice-animation {opacity: 1;animation: voice-pulse 1s infinite;}
+@keyframes pulse {0%, 100% {transform: translateY(-2px) scale(1);}50% {transform: translateY(-2px) scale(1.05);}}
+@keyframes voice-pulse {0%, 100% {transform: translate(-50%, -50%) scale(1);opacity: 0.3;}50% {transform: translate(-50%, -50%) scale(1.2);opacity: 0.1;}}
+.feedback-message {text-align: center;min-height: 2rem;font-size: 1.1rem;font-weight: 600;display: flex;align-items: center;justify-content: center;gap: 0.5rem;line-height: 1.4;}
+.feedback-message.correct {color: var(--success-color);}
+.feedback-message.wrong {color: var(--error-color);}
+.feedback-message.listening {color: var(--primary-color);}
+.game-over {display: none;max-width: 600px;margin: 0 auto;text-align: center;}
+.result-header {margin-bottom: 2rem;}
+.result-icon {width: 100px;height: 100px;margin: 0 auto 1rem auto;background: linear-gradient(135deg, var(--secondary-color) 0%, #f59e0b 100%);border-radius: 50%;display: flex;align-items: center;justify-content: center;animation: bounce 1s ease-out;}
+.result-icon .material-icons {font-size: 3rem;color: white;}
+.result-header h2 {font-family: "Poppins", sans-serif;font-size: 2rem;font-weight: 700;color: var(--text-primary);margin-bottom: 1rem;}
+.final-score {font-size: 1.25rem;color: var(--text-secondary);line-height: 1.6;}
+.performance-chart {display: flex;gap: 2rem;margin-bottom: 2rem;justify-content: center;}
+.chart-item {flex: 1;max-width: 150px;}
+.chart-bar {height: 120px;width: 40px;background: var(--bg-tertiary);border-radius: var(--radius-lg);margin: 0 auto 1rem auto;position: relative;overflow: hidden;}
+.chart-fill {position: absolute;bottom: 0;width: 100%;border-radius: var(--radius-lg);transition: height 1s ease-out;height: 0%;}
+.chart-item.correct .chart-fill {background: linear-gradient(180deg, var(--success-color) 0%, #059669 100%);}
+.chart-item.wrong .chart-fill {background: linear-gradient(180deg, var(--error-color) 0%, #dc2626 100%);}
+.chart-label {display: flex;flex-direction: column;align-items: center;gap: 0.25rem;font-size: 0.9rem;color: var(--text-secondary);}
+.chart-label .material-icons {font-size: 1.5rem;}
+.chart-item.correct .chart-label .material-icons {color: var(--success-color);}
+.chart-item.wrong .chart-label .material-icons {color: var(--error-color);}
+.mistake-summary {background: var(--bg-secondary);border-radius: var(--radius-xl);padding: 1.5rem;margin-bottom: 2rem;text-align: left;max-height: 300px;overflow-y: auto;}
+.mistake-summary h3 {color: var(--error-color);margin-bottom: 1rem;font-size: 1.1rem;}
+.mistake-summary ul {list-style: none;padding: 0;}
+.mistake-summary li {padding: 0.75rem;margin-bottom: 0.5rem;background: var(--bg-primary);border-radius: var(--radius-md);border-left: 4px solid var(--error-color);}
+.action-buttons {display: flex;gap: 1rem;justify-content: center;}
+.primary-button, .secondary-button {padding: 0.75rem 1.5rem;border-radius: var(--radius-lg);font-size: 1rem;font-weight: 600;cursor: pointer;transition: all 0.3s ease;display: flex;align-items: center;gap: 0.5rem;border: none;}
+.primary-button {background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);color: white;box-shadow: var(--shadow-md);}
+.primary-button:hover {transform: translateY(-2px);box-shadow: var(--shadow-lg);}
+.secondary-button {background: var(--bg-primary);color: var(--text-primary);border: 2px solid var(--border-color);}
+.secondary-button:hover {border-color: var(--primary-color);transform: translateY(-2px);box-shadow: var(--shadow-md);}
+@keyframes slideInDown {from {opacity: 0;transform: translateY(-30px);}to {opacity: 1;transform: translateY(0);}}
+@keyframes slideInUp {from {opacity: 0;transform: translateY(30px);}to {opacity: 1;transform: translateY(0);}}
+@keyframes bounce {0%, 20%, 53%, 80%, 100% {transform: translate3d(0, 0, 0);}40%, 43% {transform: translate3d(0, -30px, 0);}70% {transform: translate3d(0, -15px, 0);}90% {transform: translate3d(0, -4px, 0);}}
+@media (max-width: 768px) {.container {padding: 1rem;}.title-group h1 {font-size: 2.5rem;}.modern-card {padding: 1.5rem;}.game-header {flex-direction: column;align-items: stretch;}.turkish-sentence {font-size: 1.25rem;}.expected-sentence {font-size: 1rem;}.action-buttons {flex-direction: column;}}
+  </style>
+</head>
+<body>
+  <div class="background-animation">
+    <div class="floating-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+      <div class="shape shape-4"></div>
+      <div class="shape shape-5"></div>
+    </div>
+  </div>
+  
+  <div class="container">
+    <header class="main-header">
+      <div class="logo-container">
+        <div class="logo-icon">
+          <span class="material-icons">record_voice_over</span>
+        </div>
+        <div class="title-group">
+          <h1>Pronunciation Master</h1>
+          <p>Perfect Your English Pronunciation</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="level-select modern-card" id="levelSelect">
+      <div class="card-header">
+        <h2>Choose Your Challenge</h2>
+        <p>Select your pronunciation level</p>
+      </div>
+      
+      <div class="level-options">
+        <div class="level-option" data-level="A1-A2">
+          <input type="radio" id="level-beginner" name="level" value="A1-A2" checked>
+          <label for="level-beginner">
+            <div class="level-icon">
+              <span class="material-icons">school</span>
+            </div>
+            <div class="level-info">
+              <h3>Beginner</h3>
+              <span>A1-A2 Level</span>
+              <div class="level-description">Basic pronunciation</div>
+            </div>
+            <div class="level-stats">
+              <div class="stat">
+                <span class="material-icons">timer</span>
+                <span>10s per sentence</span>
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <div class="level-option" data-level="B1-B2">
+          <input type="radio" id="level-intermediate" name="level" value="B1-B2">
+          <label for="level-intermediate">
+            <div class="level-icon">
+              <span class="material-icons">trending_up</span>
+            </div>
+            <div class="level-info">
+              <h3>Intermediate</h3>
+              <span>B1-B2 Level</span>
+              <div class="level-description">Complex sentences</div>
+            </div>
+            <div class="level-stats">
+              <div class="stat">
+                <span class="material-icons">timer</span>
+                <span>10s per sentence</span>
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <div class="level-option" data-level="C1-C2">
+          <input type="radio" id="level-advanced" name="level" value="C1-C2">
+          <label for="level-advanced">
+            <div class="level-icon">
+              <span class="material-icons">military_tech</span>
+            </div>
+            <div class="level-info">
+              <h3>Advanced</h3>
+              <span>C1-C2 Level</span>
+              <div class="level-description">Professional level</div>
+            </div>
+            <div class="level-stats">
+              <div class="stat">
+                <span class="material-icons">timer</span>
+                <span>10s per sentence</span>
+              </div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <button class="start-button" id="startGame">
+        <span class="material-icons">play_arrow</span>
+        Start Challenge
+      </button>
+    </div>
+
+    <section class="game-section modern-card" id="gameSection" style="display:none">
+      <div class="game-header">
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-text">
+            <span id="questionNum">1</span> / <span id="totalQuestions">5</span>
+          </div>
+        </div>
+        
+        <div class="game-stats">
+          <div class="stat-item score-stat">
+            <span class="material-icons">stars</span>
+            <div class="stat-info">
+              <span class="stat-value" id="score">0</span>
+              <span class="stat-label">Score</span>
+            </div>
+          </div>
+          
+          <div class="stat-item timer-stat">
+            <span class="material-icons">schedule</span>
+            <div class="stat-info">
+              <span class="stat-value" id="time">10</span>
+              <span class="stat-label">Time</span>
+            </div>
+            <div class="timer-ring" id="timerRing">
+              <svg class="timer-svg" viewBox="0 0 100 100">
+                <circle class="timer-circle-bg" cx="50" cy="50" r="45"></circle>
+                <circle class="timer-circle" cx="50" cy="50" r="45" id="timerCircle"></circle>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sentence-display-container">
+        <div class="sentence-card">
+          <div class="sentence-label">Pronounce this sentence in English:</div>
+          <div class="turkish-sentence" id="turkish"></div>
+          <div class="expected-sentence" id="expectedSentence"></div>
+        </div>
+      </div>
+
+      <div class="voice-controls">
+        <button class="voice-button" id="startBtn">
+          <span class="material-icons">mic</span>
+          <span class="button-text">Start Speaking</span>
+          <div class="voice-animation" id="voiceAnimation"></div>
+        </button>
+      </div>
+      
+      <div class="feedback-message" id="feedback"></div>
+    </section>
+
+    <div class="game-over modern-card" id="gameOver" style="display:none">
+      <div class="result-header">
+        <div class="result-icon" id="resultIcon">
+          <span class="material-icons">emoji_events</span>
+        </div>
+        <h2 id="resultTitle">Challenge Complete!</h2>
+        <div class="final-score" id="finalScore"></div>
+      </div>
+
+      <div class="performance-chart">
+        <div class="chart-item correct">
+          <div class="chart-bar">
+            <div class="chart-fill" id="correctBar"></div>
+          </div>
+          <div class="chart-label">
+            <span class="material-icons">check_circle</span>
+            <span>Correct</span>
+            <span id="correctCount">0</span>
+          </div>
+        </div>
+        
+        <div class="chart-item wrong">
+          <div class="chart-bar">
+            <div class="chart-fill" id="wrongBar"></div>
+          </div>
+          <div class="chart-label">
+            <span class="material-icons">cancel</span>
+            <span>Wrong</span>
+            <span id="wrongCount">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mistake-summary" id="mistakeSummary"></div>
+
+      <div class="action-buttons">
+        <button class="secondary-button" onclick="window.location.href='/'">
+          <span class="material-icons">home</span>
+          Home
+        </button>
+        <button class="primary-button" id="playAgain">
+          <span class="material-icons">refresh</span>
+          Play Again
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="floating-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
+  <script>
+// Voice Pronunciation - Telaffuz Oyunu
+document.addEventListener("DOMContentLoaded", () => {
+  // Cümle havuzları
+  const sentencePools = {
+    "A1-A2": [
+      { tr: "Ben her sabah kahve içerim.", en: "I drink coffee every morning" },
+      { tr: "O bir öğretmen.", en: "She is a teacher" },
+      { tr: "Bu bir kalem.", en: "This is a pen" },
+      { tr: "Masada bir kitap var.", en: "There is a book on the table" },
+      { tr: "Onlar okulda.", en: "They are at school" },
+      { tr: "Ben mutluyum.", en: "I am happy" },
+      { tr: "O araba kullanıyor.", en: "He is driving a car" },
+      { tr: "Biz evdeyiz.", en: "We are at home" },
+      { tr: "Köpek koşuyor.", en: "The dog is running" },
+      { tr: "Bu çok güzel.", en: "This is very beautiful" }
+    ],
+    "B1-B2": [
+      { tr: "Ben bu filmi daha önce izledim.", en: "I have seen this movie before" },
+      { tr: "Dün sinemaya gittik.", en: "We went to the cinema yesterday" },
+      { tr: "O İngilizce konuşabilir.", en: "He can speak English" },
+      { tr: "O kitabı henüz bitirmedi.", en: "She hasn't finished the book yet" },
+      { tr: "Bu odaya girmemelisin.", en: "You must not enter this room" },
+      { tr: "Onlar çok çalışıyorlar.", en: "They are working very hard" },
+      { tr: "Yarın toplantıya katılacağım.", en: "I will attend the meeting tomorrow" },
+      { tr: "Film oldukça ilginçti.", en: "The movie was quite interesting" },
+      { tr: "Araba tamir ediliyor.", en: "The car is being repaired" },
+      { tr: "O hiç İstanbul'u ziyaret etmedi.", en: "He has never visited Istanbul" }
+    ],
+    "C1-C2": [
+      { tr: "Daha fazla çalışsaydım, sınavı geçerdim.", en: "If I had studied more, I would have passed the exam" },
+      { tr: "Toplantı ertelendi.", en: "The meeting was postponed" },
+      { tr: "O kitabı yazan adam İngilizmiş.", en: "The man who wrote that book was English" },
+      { tr: "İşini zamanında bitirmiş olmalı.", en: "He must have finished his work on time" },
+      { tr: "Bu sorular genellikle öğrenciler tarafından sorulur.", en: "These questions are often asked by students" },
+      { tr: "Eğer zamanım olsaydı, sana yardım ederdim.", en: "If I had time, I would help you" },
+      { tr: "Projeyi zamanında tamamlamış olmalı.", en: "He must have completed the project on time" },
+      { tr: "O konuşmayı yapmadan önce çok hazırlandı.", en: "She prepared a lot before giving the speech" },
+      { tr: "Hiç böyle karmaşık bir problem çözmedim.", en: "I have never solved such a complex problem" },
+      { tr: "Sorular genellikle öğrencilere sorulur.", en: "The questions are usually asked to students" }
+    ]
+  }
+
+  // Oyun durumu
+  let gameState = {
+    level: null,
+    sentences: [],
+    currentIndex: 0,
+    score: 0,
+    correctAnswers: 0,
+    wrongAnswers: 0,
+    totalQuestions: 5,
+    timeLeft: 0,
+    maxTime: 15,
+    timer: null,
+    isListening: false,
+    userAnswers: []
+  }
+
+  // Speech Recognition kurulumu
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+  let recognition = null
+
+  if (SpeechRecognition) {
+    recognition = new SpeechRecognition()
+    recognition.lang = "en-US"
+    recognition.interimResults = false
+    recognition.maxAlternatives = 1
+    recognition.continuous = false
+  }
+
+  // DOM elementleri
+  const levelSelect = document.getElementById("levelSelect")
+  const gameSection = document.getElementById("gameSection")
+  const gameOver = document.getElementById("gameOver")
+  const startGameBtn = document.getElementById("startGame")
+  const playAgainBtn = document.getElementById("playAgain")
+  
+  const turkish = document.getElementById("turkish")
+  const expectedSentence = document.getElementById("expectedSentence")
+  const startBtn = document.getElementById("startBtn")
+  const feedback = document.getElementById("feedback")
+  
+  const progressFill = document.getElementById("progressFill")
+  const questionNum = document.getElementById("questionNum")
+  const totalQuestions = document.getElementById("totalQuestions")
+  const scoreSpan = document.getElementById("score")
+  const timeSpan = document.getElementById("time")
+  const timerCircle = document.getElementById("timerCircle")
+  
+  const finalScore = document.getElementById("finalScore")
+  const correctBar = document.getElementById("correctBar")
+  const wrongBar = document.getElementById("wrongBar")
+  const correctCount = document.getElementById("correctCount")
+  const wrongCount = document.getElementById("wrongCount")
+  const mistakeSummary = document.getElementById("mistakeSummary")
+
+  // Yardımcı fonksiyonlar
+  function shuffle(array) {
+    const newArray = [...array]
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]]
+    }
+    return newArray
+  }
+
+  function normalize(text) {
+    return text.toLowerCase()
+      .replace(/[.,!?'"]/g, "")
+      .replace(/\s+/g, " ")
+      .trim()
+  }
+
+  function calculateSimilarity(str1, str2) {
+    const s1 = normalize(str1)
+    const s2 = normalize(str2)
+    
+    if (s1 === s2) return 100
+    
+    // Basit kelime eşleştirme
+    const words1 = s1.split(" ")
+    const words2 = s2.split(" ")
+    const maxLength = Math.max(words1.length, words2.length)
+    
+    if (maxLength === 0) return 0
+    
+    let matches = 0
+    words1.forEach(word => {
+      if (words2.includes(word)) matches++
+    })
+    
+    return Math.round((matches / maxLength) * 100)
+  }
+
+  function updateProgress() {
+    const progress = ((gameState.currentIndex + 1) / gameState.totalQuestions) * 100
+    if (progressFill) progressFill.style.width = `${progress}%`
+    if (questionNum) questionNum.textContent = gameState.currentIndex + 1
+  }
+
+  function updateTimer() {
+    if (timerCircle) {
+      const progress = gameState.timeLeft / gameState.maxTime
+      const circumference = 2 * Math.PI * 45
+      const offset = circumference * (1 - progress)
+      timerCircle.style.strokeDashoffset = offset
+    }
+  }
+
+  function updateUI() {
+    if (scoreSpan) scoreSpan.textContent = gameState.score
+    if (timeSpan) timeSpan.textContent = gameState.timeLeft
+    updateProgress()
+    updateTimer()
+  }
+
+  // Oyun fonksiyonları
+  function startGame() {
+    if (!recognition) {
+      alert("Ses tanıma özelliği tarayıcınızda desteklenmiyor. Lütfen Chrome veya Edge kullanın.")
+      return
+    }
+
+    const selectedLevel = document.querySelector('input[name="level"]:checked')?.value
+    if (!selectedLevel) return
+
+    // Oyun durumunu sıfırla
+    gameState = {
+      level: selectedLevel,
+      sentences: shuffle(sentencePools[selectedLevel]).slice(0, 5),
+      currentIndex: 0,
+      score: 0,
+      correctAnswers: 0,
+      wrongAnswers: 0,
+      totalQuestions: 5,
+      timeLeft: 0,
+      maxTime: 15,
+      timer: null,
+      isListening: false,
+      userAnswers: []
+    }
+
+    // Ekranları değiştir
+    if (levelSelect) levelSelect.style.display = "none"
+    if (gameSection) gameSection.style.display = "block"
+    if (gameOver) gameOver.style.display = "none"
+
+    // UI'ı güncelle
+    if (totalQuestions) totalQuestions.textContent = gameState.totalQuestions
+
+    // İlk cümleyi başlat
+    nextSentence()
+  }
+
+  function nextSentence() {
+    if (gameState.currentIndex >= gameState.totalQuestions) {
+      endGame()
+      return
+    }
+
+    // Mevcut cümleyi al
+    const currentSentence = gameState.sentences[gameState.currentIndex]
+    if (turkish) turkish.textContent = currentSentence.tr
+    if (expectedSentence) expectedSentence.textContent = `Beklenen: "${currentSentence.en}"`
+
+    // Buton durumunu sıfırla
+    if (startBtn) {
+      startBtn.disabled = false
+      startBtn.classList.remove("listening")
+      const buttonText = startBtn.querySelector(".button-text")
+      if (buttonText) buttonText.textContent = "Konuşmaya Başla"
+    }
+
+    // Feedback'i temizle
+    if (feedback) {
+      feedback.textContent = ""
+      feedback.className = "feedback-message"
+    }
+
+    // Timer'ı başlat
+    gameState.timeLeft = gameState.maxTime
+    gameState.isListening = false
+    updateUI()
+    startTimer()
+  }
+
+  function startTimer() {
+    clearInterval(gameState.timer)
+    gameState.timer = setInterval(() => {
+      gameState.timeLeft--
+      updateUI()
+
+      if (gameState.timeLeft <= 0) {
+        clearInterval(gameState.timer)
+        if (gameState.isListening && recognition) {
+          recognition.stop()
+        }
+        handleResult(null, true) // timeout = true
+      }
+    }, 1000)
+  }
+
+  function startListening() {
+    if (!recognition || gameState.isListening) return
+
+    gameState.isListening = true
+    
+    if (startBtn) {
+      startBtn.classList.add("listening")
+      startBtn.disabled = true
+      const buttonText = startBtn.querySelector(".button-text")
+      if (buttonText) buttonText.textContent = "Dinleniyor..."
+    }
+
+    if (feedback) {
+      feedback.textContent = "🎤 Dinliyorum... Lütfen konuşun"
+      feedback.className = "feedback-message listening"
+    }
+
+    try {
+      recognition.start()
+    } catch (error) {
+      console.error("Ses tanıma başlatılamadı:", error)
+      gameState.isListening = false
+      if (startBtn) {
+        startBtn.classList.remove("listening")
+        startBtn.disabled = false
+        const buttonText = startBtn.querySelector(".button-text")
+        if (buttonText) buttonText.textContent = "Konuşmaya Başla"
+      }
+    }
+  }
+
+  function handleResult(spokenText, isTimeout = false) {
+    gameState.isListening = false
+    clearInterval(gameState.timer)
+
+    if (startBtn) {
+      startBtn.classList.remove("listening")
+      startBtn.disabled = true
+    }
+
+    const currentSentence = gameState.sentences[gameState.currentIndex]
+    const expectedText = currentSentence.en
+
+    let isCorrect = false
+    let similarity = 0
+
+    if (!isTimeout && spokenText) {
+      similarity = calculateSimilarity(spokenText, expectedText)
+      isCorrect = similarity >= 70 // %70 benzerlik yeterli
+    }
+
+    if (isCorrect) {
+      gameState.score += 20
+      gameState.correctAnswers++
+      
+      if (feedback) {
+        feedback.innerHTML = `✅ Mükemmel telaffuz! (Benzerlik: %${similarity})`
+        feedback.className = "feedback-message correct"
+      }
+    } else {
+      gameState.wrongAnswers++
+      
+      if (feedback) {
+        if (isTimeout) {
+          feedback.innerHTML = `⏰ Süre bitti!<br><strong>Beklenen:</strong> ${expectedText}`
+        } else if (!spokenText) {
+          feedback.innerHTML = `❌ Ses algılanamadı!<br><strong>Beklenen:</strong> ${expectedText}`
+        } else {
+          feedback.innerHTML = `❌ Telaffuz geliştirilebilir (Benzerlik: %${similarity})<br><strong>Söylediğiniz:</strong> "${spokenText}"<br><strong>Beklenen:</strong> ${expectedText}`
+        }
+        feedback.className = "feedback-message wrong"
+      }
+    }
+
+    // Cevabı kaydet
+    gameState.userAnswers.push({
+      turkish: currentSentence.tr,
+      expected: expectedText,
+      spoken: spokenText || null,
+      similarity: similarity,
+      isCorrect: isCorrect,
+      isTimeout: isTimeout
+    })
+
+    updateUI()
+
+    // Sonraki cümleye geç
+    setTimeout(() => {
+      gameState.currentIndex++
+      nextSentence()
+    }, 3000)
+  }
+
+  function endGame() {
+    clearInterval(gameState.timer)
+
+    // Ekranları değiştir
+    if (gameSection) gameSection.style.display = "none"
+    if (gameOver) gameOver.style.display = "block"
+
+    // Sonuçları hesapla
+    const accuracy = Math.round((gameState.correctAnswers / gameState.totalQuestions) * 100)
+
+    // Final skorunu göster
+    if (finalScore) {
+      finalScore.innerHTML = `
+        <div>Skor: <strong>${gameState.score}</strong> / ${gameState.totalQuestions * 20}</div>
+        <div>Doğruluk: <strong>%${accuracy}</strong></div>
+        <div>Doğru: <strong>${gameState.correctAnswers}</strong> / Yanlış: <strong>${gameState.wrongAnswers}</strong></div>
+      `
+    }
+
+    // Grafikleri güncelle
+    if (correctCount) correctCount.textContent = gameState.correctAnswers
+    if (wrongCount) wrongCount.textContent = gameState.wrongAnswers
+
+    setTimeout(() => {
+      const correctPercentage = (gameState.correctAnswers / gameState.totalQuestions) * 100
+      const wrongPercentage = (gameState.wrongAnswers / gameState.totalQuestions) * 100
+      
+      if (correctBar) correctBar.style.height = `${correctPercentage}%`
+      if (wrongBar) wrongBar.style.height = `${wrongPercentage}%`
+    }, 500)
+
+    // Hata özetini göster
+    showMistakeSummary()
+  }
+
+  function showMistakeSummary() {
+    if (!mistakeSummary) return
+
+    const mistakes = gameState.userAnswers.filter(answer => !answer.isCorrect)
+
+    if (mistakes.length === 0) {
+      mistakeSummary.innerHTML = `
+        <div style="text-align: center; color: #4CAF50; font-weight: 600;">
+          🎉 Mükemmel! Tüm telaffuzlar doğru!
+        </div>
+      `
+      return
+    }
+
+    let html = "<h3>Telaffuz Hatalarını İncele:</h3><ul>"
+    mistakes.forEach((mistake, index) => {
+      html += `
+        <li style="margin-bottom: 1rem; padding: 1rem; border-left: 3px solid #f44336; background: #fafafa;">
+          <div><strong>Türkçe:</strong> ${mistake.turkish}</div>
+          <div><strong>Söylediğiniz:</strong> <span style="color: #f44336;">${mistake.spoken || "Ses algılanamadı"}</span></div>
+          <div><strong>Beklenen:</strong> <span style="color: #4CAF50;">${mistake.expected}</span></div>
+          ${mistake.similarity > 0 ? `<div><strong>Benzerlik:</strong> %${mistake.similarity}</div>` : ""}
+        </li>
+      `
+    })
+    html += "</ul>"
+
+    mistakeSummary.innerHTML = html
+  }
+
+  function resetGame() {
+    clearInterval(gameState.timer)
+    gameState.isListening = false
+    
+    if (recognition) {
+      try {
+        recognition.stop()
+      } catch (error) {
+        // Ses tanıma zaten durdurulmuş
+      }
+    }
+    
+    // Ekranları sıfırla
+    if (levelSelect) levelSelect.style.display = "block"
+    if (gameSection) gameSection.style.display = "none"
+    if (gameOver) gameOver.style.display = "none"
+
+    // Progress bar'ı sıfırla
+    if (progressFill) progressFill.style.width = "0%"
+    if (correctBar) correctBar.style.height = "0%"
+    if (wrongBar) wrongBar.style.height = "0%"
+    if (timerCircle) timerCircle.style.strokeDashoffset = "283"
+  }
+
+  // Speech Recognition Event Listener'ları
+  if (recognition) {
+    recognition.onresult = (event) => {
+      const spokenText = event.results[0][0].transcript
+      handleResult(spokenText)
+    }
+
+    recognition.onerror = (event) => {
+      console.error("Ses tanıma hatası:", event.error)
+      gameState.isListening = false
+      
+      if (startBtn) {
+        startBtn.classList.remove("listening")
+        startBtn.disabled = false
+        const buttonText = startBtn.querySelector(".button-text")
+        if (buttonText) buttonText.textContent = "Konuşmaya Başla"
+      }
+
+      if (feedback) {
+        feedback.innerHTML = `⚠️ Ses tanıma hatası: ${event.error}. Lütfen tekrar deneyin.`
+        feedback.className = "feedback-message wrong"
+      }
+    }
+
+    recognition.onend = () => {
+      if (gameState.isListening) {
+        // Beklenmedik şekilde durdu, kullanıcıya bildir
+        gameState.isListening = false
+        if (startBtn) {
+          startBtn.classList.remove("listening")
+          startBtn.disabled = false
+          const buttonText = startBtn.querySelector(".button-text")
+          if (buttonText) buttonText.textContent = "Konuşmaya Başla"
+        }
+      }
+    }
+  }
+
+  // Event listener'lar
+  if (startGameBtn) {
+    startGameBtn.addEventListener("click", startGame)
+  }
+
+  if (playAgainBtn) {
+    playAgainBtn.addEventListener("click", resetGame)
+  }
+
+  if (startBtn) {
+    startBtn.addEventListener("click", startListening)
+  }
+
+  // Başlangıç durumu
+  resetGame()
+})
+  </script>
+</body>
+</html>

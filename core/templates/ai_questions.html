@@ -1,0 +1,329 @@
+{% extends 'base.html' %}
+
+{% block title %}AI İngilizce Koçu - İngilizce Öğrenme Platformu{% endblock %}
+
+{% block content %}
+<div class="header">
+    <div>
+        <h1 class="page-title">AI İngilizce Koçu</h1>
+        <p class="page-subtitle">İngilizce öğrenme konusunda her türlü sorunuzu sorun, AI size yardımcı olsun</p>
+    </div>
+</div>
+
+<div class="content-grid">
+    <!-- Sol Taraf - Chatbot -->
+    <div class="main-card">
+        <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="card-title">AI İngilizce Koçu</div>
+        </div>
+        
+        <div id="chat-container" style="height: 400px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px; background: #f8fafc;">
+            <div id="chat-messages">
+                <div style="display: flex; margin-bottom: 15px;">
+                    <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <i class="fas fa-graduation-cap" style="color: white;"></i>
+                    </div>
+                    <div style="background: white; padding: 12px 16px; border-radius: 12px; max-width: 70%; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <p style="margin: 0; color: #1e293b;">Merhaba! Ben İngilizce öğrenme konusunda size yardımcı olacak AI koçunuz. İngilizce ile ilgili her türlü sorunuzu sorabilirsiniz:</p>
+                        <ul style="margin: 10px 0 0 0; padding-left: 20px; color: #64748b;">
+                            <li>Çalışma programı nasıl oluşturulur?</li>
+                            <li>Hangi kaynakları kullanmalıyım?</li>
+                            <li>Dilbilgisi konularında yardım</li>
+                            <li>Kelime öğrenme teknikleri</li>
+                            <li>Konuşma pratiği nasıl yapılır?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="message-input" placeholder="İngilizce öğrenme ile ilgili sorunuzu yazın..." style="flex: 1; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;">
+            <button onclick="sendMessage()" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i>
+                Gönder
+            </button>
+        </div>
+    </div>
+
+    <!-- Sağ Taraf - Hızlı Sorular -->
+    <div class="main-card">
+        <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                <i class="fas fa-lightning-bolt"></i>
+            </div>
+            <div class="card-title">Hızlı Sorular</div>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <button onclick="askQuickQuestion('İngilizce çalışma programı nasıl oluşturulur?')" class="btn btn-secondary" style="justify-content: flex-start; text-align: left;">
+                <i class="fas fa-calendar" style="margin-right: 10px;"></i>
+                <div>
+                    <div style="font-weight: 600; color: #1e293b;">Çalışma Programı</div>
+                    <div style="font-size: 12px; color: #64748b;">Etkili bir çalışma planı nasıl oluşturulur?</div>
+                </div>
+            </button>
+            
+            <button onclick="askQuickQuestion('Hangi İngilizce kaynakları önerirsin?')" class="btn btn-secondary" style="justify-content: flex-start; text-align: left;">
+                <i class="fas fa-book" style="margin-right: 10px;"></i>
+                <div>
+                    <div style="font-weight: 600; color: #1e293b;">Kaynak Önerileri</div>
+                    <div style="font-size: 12px; color: #64748b;">En iyi İngilizce öğrenme kaynakları</div>
+                </div>
+            </button>
+            
+            <button onclick="askQuickQuestion('Kelime öğrenme teknikleri nelerdir?')" class="btn btn-secondary" style="justify-content: flex-start; text-align: left;">
+                <i class="fas fa-brain" style="margin-right: 10px;"></i>
+                <div>
+                    <div style="font-weight: 600; color: #1e293b;">Kelime Öğrenme</div>
+                    <div style="font-size: 12px; color: #64748b;">Kelime hafızasını geliştirme yöntemleri</div>
+                </div>
+            </button>
+            
+            <button onclick="askQuickQuestion('Konuşma pratiği nasıl yapılır?')" class="btn btn-secondary" style="justify-content: flex-start; text-align: left;">
+                <i class="fas fa-comments" style="margin-right: 10px;"></i>
+                <div>
+                    <div style="font-weight: 600; color: #1e293b;">Konuşma Pratiği</div>
+                    <div style="font-size: 12px; color: #64748b;">Akıcı konuşma için ipuçları</div>
+                </div>
+            </button>
+            
+            <button onclick="askQuickQuestion('Dilbilgisi konularında yardım alabilir miyim?')" class="btn btn-secondary" style="justify-content: flex-start; text-align: left;">
+                <i class="fas fa-language" style="margin-right: 10px;"></i>
+                <div>
+                    <div style="font-weight: 600; color: #1e293b;">Dilbilgisi Yardımı</div>
+                    <div style="font-size: 12px; color: #64748b;">Karmaşık dilbilgisi konuları</div>
+                </div>
+            </button>
+            
+            <button onclick="askQuickQuestion('Sınav hazırlığı için önerilerin neler?')" class="btn btn-secondary" style="justify-content: flex-start; text-align: left;">
+                <i class="fas fa-clipboard-check" style="margin-right: 10px;"></i>
+                <div>
+                    <div style="font-weight: 600; color: #1e293b;">Sınav Hazırlığı</div>
+                    <div style="font-size: 12px; color: #64748b;">TOEFL, IELTS, Cambridge sınavları</div>
+                </div>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- İstatistikler -->
+<div style="margin-top: 40px;">
+    <h3 style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 20px;">AI Koç İstatistikleri</h3>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Toplam Soru</div>
+                    <div class="stat-value">24</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Toplam Süre</div>
+                    <div class="stat-value">1s 45dk</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Memnuniyet</div>
+                    <div class="stat-value">9.2/10</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Öğrenilen İpucu</div>
+                    <div class="stat-value">18</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let conversationHistory = [];
+
+function sendMessage() {
+    const input = document.getElementById('message-input');
+    const message = input.value.trim();
+    
+    if (message) {
+        addMessage(message, 'user');
+        input.value = '';
+        
+        // Send to backend
+        sendToAI(message);
+    }
+}
+
+function askQuickQuestion(question) {
+    addMessage(question, 'user');
+    sendToAI(question);
+}
+
+function sendToAI(message) {
+    fetch('/ai-questions-chat/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            message: message,
+            conversation_history: conversationHistory
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            addMessage(data.response, 'ai');
+        } else {
+            addMessage('Üzgünüm, bir hata oluştu. Lütfen tekrar deneyin.', 'ai');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        addMessage('Bağlantı hatası. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.', 'ai');
+    });
+}
+
+function addMessage(text, sender) {
+    const chatMessages = document.getElementById('chat-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.style.display = 'flex';
+    messageDiv.style.marginBottom = '15px';
+    messageDiv.style.justifyContent = sender === 'user' ? 'flex-end' : 'flex-start';
+    
+    const iconDiv = document.createElement('div');
+    iconDiv.style.width = '40px';
+    iconDiv.style.height = '40px';
+    iconDiv.style.borderRadius = '50%';
+    iconDiv.style.display = 'flex';
+    iconDiv.style.alignItems = 'center';
+    iconDiv.style.justifyContent = 'center';
+    iconDiv.style.marginRight = '10px';
+    iconDiv.style.background = sender === 'user' ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+    
+    const icon = document.createElement('i');
+    icon.className = sender === 'user' ? 'fas fa-user' : 'fas fa-graduation-cap';
+    icon.style.color = 'white';
+    iconDiv.appendChild(icon);
+    
+    const textDiv = document.createElement('div');
+    textDiv.style.background = 'white';
+    textDiv.style.padding = '12px 16px';
+    textDiv.style.borderRadius = '12px';
+    textDiv.style.maxWidth = '70%';
+    textDiv.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+    
+    if (sender === 'ai') {
+        // Convert markdown to HTML for AI messages
+        textDiv.innerHTML = formatMessage(text);
+    } else {
+        // User messages remain as plain text
+        const textP = document.createElement('p');
+        textP.style.margin = '0';
+        textP.style.color = '#1e293b';
+        textP.textContent = text;
+        textDiv.appendChild(textP);
+    }
+    
+    if (sender === 'user') {
+        messageDiv.appendChild(textDiv);
+        messageDiv.appendChild(iconDiv);
+    } else {
+        messageDiv.appendChild(iconDiv);
+        messageDiv.appendChild(textDiv);
+    }
+    
+    chatMessages.appendChild(messageDiv);
+    
+    // Add to conversation history
+    conversationHistory.push({
+        role: sender === 'user' ? 'user' : 'assistant',
+        content: text
+    });
+    
+    // Scroll to bottom
+    const chatContainer = document.getElementById('chat-container');
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+function formatMessage(text) {
+    // Convert markdown-style formatting to HTML
+    let formattedText = text;
+    
+    // Bold text: **text** -> <strong>text</strong>
+    formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    
+    // Italic text: *text* -> <em>text</em>
+    formattedText = formattedText.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    
+    // Headers: **Header** -> <h4>Header</h4>
+    formattedText = formattedText.replace(/^\*\*(.*?)\*\*$/gm, '<h4 style="margin: 10px 0 5px 0; color: #1e293b; font-weight: 600;">$1</h4>');
+    
+    // Numbered lists: 1. item -> <ol><li>item</li></ol>
+    formattedText = formattedText.replace(/^\d+\.\s+(.*)$/gm, '<li style="margin: 5px 0; color: #374151;">$1</li>');
+    
+    // Bullet lists: - item -> <ul><li>item</li></ul>
+    formattedText = formattedText.replace(/^[-•]\s+(.*)$/gm, '<li style="margin: 5px 0; color: #374151;">$1</li>');
+    
+    // Wrap lists in proper containers
+    formattedText = formattedText.replace(/(<li.*?<\/li>)/gs, '<ul style="margin: 10px 0; padding-left: 20px;">$1</ul>');
+    
+    // Line breaks
+    formattedText = formattedText.replace(/\n/g, '<br>');
+    
+    // Add default styling
+    formattedText = '<div style="color: #1e293b; line-height: 1.6;">' + formattedText + '</div>';
+    
+    return formattedText;
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Event listeners
+document.getElementById('message-input').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        sendMessage();
+    }
+});
+</script>
+{% endblock %} 

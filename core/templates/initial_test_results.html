@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+
+{% block title %}Başlangıç Test Sonuçları{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="content-header">
+        <h1>Başlangıç Test Sonuçları</h1>
+        <p>Test cevaplarınız aşağıda listelenmiştir</p>
+    </div>
+
+    <div class="results-container">
+        <div class="results-summary">
+            <div class="summary-card">
+                <h3>Test Özeti</h3>
+                <div class="summary-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Toplam Soru:</span>
+                        <span class="stat-value">{{ answers.count }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Test Tarihi:</span>
+                        <span class="stat-value">{{ answers.first.answered_at|date:"d.m.Y H:i" }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="answers-list">
+            <h3>Cevaplarınız</h3>
+            {% for answer in answers %}
+            <div class="answer-item">
+                <div class="answer-header">
+                    <span class="question-number">Soru {{ answer.question_number }}</span>
+                    <span class="answer-value">Cevabınız: {{ answer.answer }}</span>
+                </div>
+                <div class="answer-time">
+                    <small>{{ answer.answered_at|date:"H:i:s" }}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="results-actions">
+            <a href="{% url 'dashboard' %}" class="btn btn-primary">
+                <i class="fas fa-home"></i>
+                Ana Sayfaya Dön
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.results-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.results-summary {
+    margin-bottom: 30px;
+}
+
+.summary-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.summary-card h3 {
+    color: #1e293b;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.summary-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.stat-label {
+    font-weight: 500;
+    color: #64748b;
+}
+
+.stat-value {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.answers-list {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.answers-list h3 {
+    color: #1e293b;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.answer-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    margin-bottom: 12px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.answer-item:hover {
+    background: #eff6ff;
+    border-color: #3b82f6;
+}
+
+.answer-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.question-number {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 16px;
+}
+
+.answer-value {
+    color: #3b82f6;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.answer-time {
+    color: #64748b;
+    font-size: 14px;
+}
+
+.results-actions {
+    text-align: center;
+    padding: 20px;
+}
+
+.content-header {
+    text-align: center;
+    margin-bottom: 30px;
+    color: white;
+}
+
+.content-header h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.content-header p {
+    font-size: 18px;
+    opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+    .results-container {
+        padding: 10px;
+    }
+    
+    .summary-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .answer-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .answer-header {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+</style>
+{% endblock %} 

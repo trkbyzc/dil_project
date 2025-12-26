@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block title %}Başlangıç Testi{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="content-header">
+        <h1>Başlangıç Testi</h1>
+        <p>Seviyenizi belirlemek için 10 soruya cevap verin</p>
+    </div>
+
+    <div class="test-container">
+        <form method="POST" class="test-form">
+            {% csrf_token %}
+            
+            {% for question in questions %}
+            <div class="question-card">
+                <div class="question-header">
+                    <span class="question-number">Soru {{ question.number }}</span>
+                    <span class="question-progress">{{ question.number }}/10</span>
+                </div>
+                
+                <div class="question-content">
+                    <h3 class="question-text">{{ question.question }}</h3>
+                    
+                    <div class="choices">
+                        {% for choice_key, choice_text in question.choices.items %}
+                        <label class="choice-item">
+                            <input type="radio" name="question_{{ question.number }}" value="{{ choice_key }}" required>
+                            <span class="choice-text">{{ choice_key }}. {{ choice_text }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+            <div class="test-actions">
+                <button type="submit" class="btn btn-primary btn-large">
+                    <i class="fas fa-check"></i>
+                    Testi Tamamla
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.test-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.question-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+.question-number {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.question-progress {
+    background: #3b82f6;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.question-text {
+    font-size: 20px;
+    color: #1e293b;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.choices {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.choice-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #f8fafc;
+}
+
+.choice-item:hover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+}
+
+.choice-item input[type="radio"] {
+    margin-right: 12px;
+    transform: scale(1.2);
+}
+
+.choice-item input[type="radio"]:checked + .choice-text {
+    color: #3b82f6;
+    font-weight: 600;
+}
+
+.choice-text {
+    font-size: 16px;
+    color: #374151;
+    flex: 1;
+}
+
+.test-actions {
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+}
+
+.btn-large {
+    padding: 16px 32px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.content-header {
+    text-align: center;
+    margin-bottom: 30px;
+    color: white;
+}
+
+.content-header h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.content-header p {
+    font-size: 18px;
+    opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+    .test-container {
+        padding: 10px;
+    }
+    
+    .question-card {
+        padding: 16px;
+    }
+    
+    .question-text {
+        font-size: 18px;
+    }
+    
+    .choice-text {
+        font-size: 14px;
+    }
+}
+</style>
+{% endblock %} 

@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block title %}Seviye Testi - İngilizce Öğrenme Platformu{% endblock %}
+
+{% block content %}
+  {% if user.is_superuser %}
+    <!-- Admin Panel -->
+    <div class="header">
+      <div>
+        <h1 class="page-title">Admin Panel - Soru Yönetimi</h1>
+        <p class="page-subtitle">Test sorularını yönetin ve sonuçları görüntüleyin</p>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <div class="main-card">
+        <div class="card-header">
+          <div class="card-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <i class="fas fa-cog"></i>
+          </div>
+          <div class="card-title">Soru Yönetimi</div>
+        </div>
+        
+        <div style="margin-bottom: 30px;">
+          <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 15px;">Mevcut Sorular ({{ all_questions|length }})</h3>
+          
+          {% for q in all_questions %}
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+              <div style="display: flex; justify-content: between; align-items: start; margin-bottom: 10px;">
+                <h5 style="margin: 0; color: #1e293b; flex: 1;">{{ q.text }}</h5>
+                <div style="display: flex; gap: 8px;">
+                  <a href="{% url 'edit_question' q.id %}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">
+                    <i class="fas fa-edit"></i> Düzenle
+                  </a>
+                  <a href="{% url 'delete_question' q.id %}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px; background: #ef4444; border-color: #ef4444;">
+                    <i class="fas fa-trash"></i> Sil
+                  </a>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; font-size: 14px;">
+                <div style="color: #64748b;">A: {{ q.choice_a }}</div>
+                <div style="color: #64748b;">B: {{ q.choice_b }}</div>
+                <div style="color: #64748b;">C: {{ q.choice_c }}</div>
+              </div>
+              <div style="margin-top: 8px; font-weight: 600; color: #10b981;">
+                Doğru Cevap: {{ q.correct_choice }}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 20px; border-radius: 12px; border-left: 4px solid #0ea5e9;">
+          <h4 style="color: #0c4a6e; margin-bottom: 15px; font-weight: 600;">Yeni Soru Ekle</h4>
+          <form method="post" action="{% url 'add_question' %}">
+            {% csrf_token %}
+            <div style="display: grid; gap: 15px;">
+              <div>
+                <label style="display: block; font-weight: 600; color: #1e293b; margin-bottom: 5px;">Soru:</label>
+                {{ form.text }}
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                <div>
+                  <label style="display: block; font-weight: 600; color: #1e293b; margin-bottom: 5px;">A Seçeneği:</label>
+                  {{ form.choice_a }}
+                </div>
+                <div>
+                  <label style="display: block; font-weight: 600; color: #1e293b; margin-bottom: 5px;">B Seçeneği:</label>
+                  {{ form.choice_b }}
+                </div>
+                <div>
+                  <label style="display: block; font-weight: 600; color: #1e293b; margin-bottom: 5px;">C Seçeneği:</label>
+                  {{ form.choice_c }}
+                </div>
+              </div>
+              <div>
+                <label style="display: block; font-weight: 600; color: #1e293b; margin-bottom: 5px;">Doğru Cevap:</label>
+                {{ form.correct_choice }}
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%;">
+                <i class="fas fa-plus"></i> Soru Ekle
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="main-card">
+        <div class="card-header">
+          <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+            <i class="fas fa-chart-bar"></i>
+          </div>
+          <div class="card-title">Test Sonuçları</div>
+        </div>
+        
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+            <thead>
+              <tr style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); color: white;">
+                <th style="padding: 12px; text-align: left; border-radius: 8px 0 0 0;">Kullanıcı</th>
+                <th style="padding: 12px; text-align: center;">Skor</th>
+                <th style="padding: 12px; text-align: center;">Toplam</th>
+                <th style="padding: 12px; text-align: center; border-radius: 0 8px 0 0;">Tarih</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for result in results %}
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                  <td style="padding: 12px; color: #1e293b;">{{ result.user.username }}</td>
+                  <td style="padding: 12px; text-align: center; font-weight: 600; color: #10b981;">{{ result.score }}</td>
+                  <td style="padding: 12px; text-align: center; color: #64748b;">{{ result.total }}</td>
+                  <td style="padding: 12px; text-align: center; color: #64748b;">{{ result.date_taken|date:"d.m.Y H:i" }}</td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="4" style="padding: 20px; text-align: center; color: #64748b;">Henüz hiç test sonucu yok.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if question %}
+    <!-- Test Interface -->
+    <div class="header">
+      <div>
+        <h1 class="page-title">Seviye Testi</h1>
+        <p class="page-subtitle">İngilizce seviyenizi belirleyin</p>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <!-- Progress Bar -->
+      <div class="main-card">
+        <div class="card-header">
+          <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="card-title">Test İlerlemesi</div>
+        </div>
+        
+        <div style="padding: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <span style="font-weight: 600; color: #1e293b;">Soru {{ question_index|default:1 }}/20</span>
+            <span style="color: #64748b;">%{{ progress|default:5 }} tamamlandı</span>
+          </div>
+          
+          <div style="background: #e2e8f0; border-radius: 10px; height: 8px; overflow: hidden;">
+            <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); height: 100%; width: {{ progress|default:5 }}%; transition: width 0.3s ease;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question Card -->
+      <div class="main-card" style="grid-column: 1 / -1;">
+        <div class="card-header">
+          <div class="card-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <i class="fas fa-question-circle"></i>
+          </div>
+          <div class="card-title">Soru {{ question_index|default:1 }}</div>
+        </div>
+        
+        <div style="padding: 30px;">
+          <h3 style="font-size: 20px; font-weight: 600; color: #1e293b; margin-bottom: 30px; line-height: 1.5;">
+            {{ question.text }}
+          </h3>
+          
+          <form method="post" id="questionForm">
+            {% csrf_token %}
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+              {% for letter, text in question.choices %}
+                <label class="answer-option" style="display: flex; align-items: center; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; background: white;">
+                  <input type="radio" name="answer" value="{{ letter }}" required style="margin-right: 15px; transform: scale(1.2);">
+                  <div>
+                    <div style="font-weight: 600; color: #667eea; margin-bottom: 5px;">{{ letter }}.</div>
+                    <div style="color: #1e293b; font-size: 16px;">{{ text }}</div>
+                  </div>
+                </label>
+              {% endfor %}
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
+              <div style="color: #64748b; font-size: 14px;">
+                <i class="fas fa-info-circle" style="margin-right: 5px;"></i>
+                Bir seçenek seçin ve "Cevapla" butonuna basın
+              </div>
+              <button type="submit" class="btn btn-primary" style="padding: 12px 30px; font-size: 16px; font-weight: 600;">
+                <i class="fas fa-arrow-right"></i>
+                Cevapla
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <style>
+    .answer-option:hover {
+      border-color: #667eea;
+      background: #f8fafc;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+    }
+    
+    .answer-option input[type="radio"]:checked + div {
+      color: #667eea;
+    }
+    
+    .answer-option:has(input[type="radio"]:checked) {
+      border-color: #667eea;
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    }
+    </style>
+
+    <script>
+    // Add click handlers for answer options
+    document.querySelectorAll('.answer-option').forEach(option => {
+      option.addEventListener('click', function() {
+        const radio = this.querySelector('input[type="radio"]');
+        radio.checked = true;
+        
+        // Remove selected state from all options
+        document.querySelectorAll('.answer-option').forEach(opt => {
+          opt.style.borderColor = '#e2e8f0';
+          opt.style.background = 'white';
+        });
+        
+        // Add selected state to clicked option
+        this.style.borderColor = '#667eea';
+        this.style.background = 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)';
+      });
+    });
+    
+    // Form validation
+    document.getElementById('questionForm').addEventListener('submit', function(e) {
+      const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+      if (!selectedAnswer) {
+        e.preventDefault();
+        alert('Lütfen bir seçenek seçin!');
+        return false;
+      }
+    });
+    </script>
+  {% endif %}
+{% endblock %}

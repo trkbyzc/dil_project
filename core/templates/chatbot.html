@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Chatbot{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Chatbot ile Konuş</h2>
+
+<div class="card">
+    <div class="card-body">
+        <div id="chat-box" style="height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
+            <div class="text-muted">Sohbet burada görünecek...</div>
+        </div>
+        <form id="chat-form" class="mt-3">
+            <div class="input-group">
+                <input type="text" id="user-input" class="form-control" placeholder="Bir şey yazın..." required>
+                <button class="btn btn-primary" type="submit">Gönder</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.getElementById('chat-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const userInput = document.getElementById('user-input').value.trim();
+    if (!userInput) return;
+
+    const chatBox = document.getElementById('chat-box');
+    chatBox.innerHTML += `<div><strong>Sen:</strong> ${userInput}</div>`;
+    document.getElementById('user-input').value = "";
+
+    // Placeholder bot cevabı (API hazır olduğunda değiştirilecek)
+    setTimeout(() => {
+        chatBox.innerHTML += `<div><strong>Bot:</strong> (Buraya API yanıtı gelecek)</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }, 1000);
+});
+</script>
+{% endblock %}

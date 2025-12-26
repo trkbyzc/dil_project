@@ -1,0 +1,18 @@
+<!-- templates/home.html -->
+{% extends "base.html" %}
+
+{% block title %}Anasayfa{% endblock %}
+
+{% block content %}
+  <h1 class="text-center">Dil Öğrenme Platformuna Hoş Geldiniz!</h1>
+  <p class="text-center">Yeni bir dil öğrenmeye hemen başlayın.</p>
+
+  <div class="card mt-4">
+    <div class="card-header bg-primary text-white">Ücretli Planlarımız</div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">Temel Plan – 49 TL/ay</li>
+      <li class="list-group-item">Profesyonel Plan – 99 TL/ay</li>
+      <li class="list-group-item">Premium Plan – 149 TL/ay</li>
+    </ul>
+  </div>
+{% endblock %}

@@ -1,0 +1,222 @@
+[
+  {
+    "model": "core.question",
+    "pk": 1,
+    "fields": {
+      "text": "What is the plural of 'child'?",
+      "choice_a": "childs",
+      "choice_b": "children",
+      "choice_c": "childes",
+      "correct_choice": "B"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 2,
+    "fields": {
+      "text": "Which is a verb?",
+      "choice_a": "run",
+      "choice_b": "happy",
+      "choice_c": "quickly",
+      "correct_choice": "A"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 3,
+    "fields": {
+      "text": "What is the opposite of 'hot'?",
+      "choice_a": "cold",
+      "choice_b": "warm",
+      "choice_c": "dry",
+      "correct_choice": "A"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 4,
+    "fields": {
+      "text": "Choose the correct article: ___ apple.",
+      "choice_a": "A",
+      "choice_b": "An",
+      "choice_c": "The",
+      "correct_choice": "B"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 5,
+    "fields": {
+      "text": "Which is a noun?",
+      "choice_a": "jump",
+      "choice_b": "music",
+      "choice_c": "quickly",
+      "correct_choice": "B"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 6,
+    "fields": {
+      "text": "Complete the sentence: 'I ___ to school every day.'",
+      "choice_a": "go",
+      "choice_b": "goes",
+      "choice_c": "going",
+      "correct_choice": "A"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 7,
+    "fields": {
+      "text": "What is the past tense of 'go'?",
+      "choice_a": "goed",
+      "choice_b": "went",
+      "choice_c": "gone",
+      "correct_choice": "B"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 8,
+    "fields": {
+      "text": "Choose the correct form: 'She ___ a doctor.'",
+      "choice_a": "am",
+      "choice_b": "is",
+      "choice_c": "are",
+      "correct_choice": "B"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 9,
+    "fields": {
+      "text": "What does 'ubiquitous' mean?",
+      "choice_a": "rare",
+      "choice_b": "present everywhere",
+      "choice_c": "dangerous",
+      "correct_choice": "B"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 10,
+    "fields": {
+      "text": "Which sentence is grammatically correct?",
+      "choice_a": "I have been to Paris last year.",
+      "choice_b": "I went to Paris last year.",
+      "choice_c": "I am going to Paris last year.",
+      "correct_choice": "B"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 11,
+    "fields": {
+      "text": "What is the comparative form of 'good'?",
+      "choice_a": "gooder",
+      "choice_b": "more good",
+      "choice_c": "better",
+      "correct_choice": "C"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 12,
+    "fields": {
+      "text": "Complete: 'If I ___ rich, I would travel the world.'",
+      "choice_a": "am",
+      "choice_b": "was",
+      "choice_c": "were",
+      "correct_choice": "C"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 13,
+    "fields": {
+      "text": "What is a synonym for 'enormous'?",
+      "choice_a": "small",
+      "choice_b": "huge",
+      "choice_c": "tiny",
+      "correct_choice": "B"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 14,
+    "fields": {
+      "text": "Choose the correct preposition: 'I'm interested ___ learning English.'",
+      "choice_a": "in",
+      "choice_b": "on",
+      "choice_c": "at",
+      "correct_choice": "A"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 15,
+    "fields": {
+      "text": "What is the meaning of 'procrastinate'?",
+      "choice_a": "to work hard",
+      "choice_b": "to delay doing something",
+      "choice_c": "to finish quickly",
+      "correct_choice": "B"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 16,
+    "fields": {
+      "text": "Which word is an antonym of 'generous'?",
+      "choice_a": "kind",
+      "choice_b": "selfish",
+      "choice_c": "friendly",
+      "correct_choice": "B"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 17,
+    "fields": {
+      "text": "Complete: 'The book ___ on the table.'",
+      "choice_a": "is",
+      "choice_b": "are",
+      "choice_c": "am",
+      "correct_choice": "A"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 18,
+    "fields": {
+      "text": "What is the superlative form of 'far'?",
+      "choice_a": "farther",
+      "choice_b": "farthest",
+      "choice_c": "more far",
+      "correct_choice": "B"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 19,
+    "fields": {
+      "text": "Choose the correct word: 'She has ___ beautiful voice.'",
+      "choice_a": "a",
+      "choice_b": "an",
+      "choice_c": "the",
+      "correct_choice": "A"
+    }
+  },
+  {
+    "model": "core.question",
+    "pk": 20,
+    "fields": {
+      "text": "What does 'ambiguous' mean?",
+      "choice_a": "clear",
+      "choice_b": "unclear or having multiple meanings",
+      "choice_c": "simple",
+      "correct_choice": "B"
+    }
+  }
+]

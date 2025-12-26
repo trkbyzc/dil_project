@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>VocabBlitz - Bilingual Word Match</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+:root {--primary-color: #6366f1;--primary-dark: #4f46e5;--primary-light: #818cf8;--secondary-color: #f59e0b;--success-color: #10b981;--error-color: #ef4444;--text-primary: #1f2937;--text-secondary: #6b7280;--text-light: #9ca3af;--bg-primary: #ffffff;--bg-secondary: #f9fafb;--bg-tertiary: #f3f4f6;--border-color: #e5e7eb;--shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);--shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);--shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);--radius-sm: 0.375rem;--radius-lg: 0.75rem;--radius-xl: 1rem;--radius-2xl: 1.5rem;}
+* {margin: 0;padding: 0;box-sizing: border-box;}
+body {font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);min-height: 100vh;color: var(--text-primary);overflow-x: hidden;position: relative;}
+.background-animation {position: fixed;top: 0;left: 0;width: 100%;height: 100%;z-index: -2;background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);}
+.floating-shapes {position: absolute;width: 100%;height: 100%;overflow: hidden;}
+.shape {position: absolute;background: rgba(255, 255, 255, 0.1);border-radius: 50%;animation: float 20s infinite linear;}
+.shape-1 {width: 80px;height: 80px;left: 10%;animation-delay: 0s;}
+.shape-2 {width: 120px;height: 120px;left: 20%;animation-delay: 2s;}
+.shape-3 {width: 60px;height: 60px;left: 70%;animation-delay: 4s;}
+.shape-4 {width: 100px;height: 100px;left: 80%;animation-delay: 6s;}
+.shape-5 {width: 140px;height: 140px;left: 50%;animation-delay: 8s;}
+@keyframes float {0% {transform: translateY(100vh) rotate(0deg);opacity: 0;}10% {opacity: 1;}90% {opacity: 1;}100% {transform: translateY(-100px) rotate(360deg);opacity: 0;}}
+.floating-particles {position: fixed;top: 0;left: 0;width: 100%;height: 100%;pointer-events: none;z-index: -1;}
+.particle {position: absolute;width: 4px;height: 4px;background: rgba(255, 255, 255, 0.6);border-radius: 50%;animation: particle-float 15s infinite linear;}
+.particle:nth-child(1) {left: 20%;animation-delay: 0s;}
+.particle:nth-child(2) {left: 40%;animation-delay: 3s;}
+.particle:nth-child(3) {left: 60%;animation-delay: 6s;}
+.particle:nth-child(4) {left: 80%;animation-delay: 9s;}
+.particle:nth-child(5) {left: 90%;animation-delay: 12s;}
+@keyframes particle-float {0% {transform: translateY(100vh);opacity: 0;}10% {opacity: 1;}90% {opacity: 1;}100% {transform: translateY(-10px);opacity: 0;}}
+.container {max-width: 1200px;margin: 0 auto;padding: 2rem 1rem;position: relative;z-index: 1;}
+.main-header {text-align: center;margin-bottom: 3rem;animation: slideInDown 0.8s ease-out;}
+.logo-container {display: flex;align-items: center;justify-content: center;gap: 1rem;margin-bottom: 1rem;}
+.logo-icon {width: 80px;height: 80px;background: rgba(255, 255, 255, 0.2);border-radius: var(--radius-2xl);display: flex;align-items: center;justify-content: center;backdrop-filter: blur(10px);border: 1px solid rgba(255, 255, 255, 0.3);}
+.logo-icon .material-icons {font-size: 2.5rem;color: white;}
+.title-group h1 {font-family: "Poppins", sans-serif;font-size: 3.5rem;font-weight: 800;color: white;text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);margin: 0;letter-spacing: -0.02em;}
+.title-group p {font-size: 1.25rem;color: rgba(255, 255, 255, 0.9);font-weight: 500;margin: 0.5rem 0 0 0;}
+.modern-card {background: rgba(255, 255, 255, 0.95);backdrop-filter: blur(20px);border-radius: var(--radius-2xl);border: 1px solid rgba(255, 255, 255, 0.2);box-shadow: var(--shadow-xl);padding: 2rem;margin-bottom: 2rem;animation: slideInUp 0.8s ease-out;}
+.level-select {max-width: 600px;margin: 0 auto 2rem auto;}
+.card-header {text-align: center;margin-bottom: 2rem;}
+.card-header h2 {font-family: "Poppins", sans-serif;font-size: 2rem;font-weight: 700;color: var(--text-primary);margin-bottom: 0.5rem;}
+.card-header p {color: var(--text-secondary);font-size: 1.1rem;}
+.level-options {display: flex;flex-direction: column;gap: 1rem;margin-bottom: 2rem;}
+.level-option input[type="radio"] {display: none;}
+.level-option label {display: flex;align-items: center;gap: 1rem;padding: 1.5rem;border: 2px solid var(--border-color);border-radius: var(--radius-xl);cursor: pointer;transition: all 0.3s ease;background: var(--bg-primary);}
+.level-option label:hover {border-color: var(--primary-light);transform: translateY(-2px);box-shadow: var(--shadow-lg);}
+.level-option input[type="radio"]:checked + label {border-color: var(--primary-color);background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);color: white;transform: translateY(-2px);box-shadow: var(--shadow-lg);}
+.level-icon {width: 60px;height: 60px;border-radius: var(--radius-lg);display: flex;align-items: center;justify-content: center;background: var(--bg-secondary);transition: all 0.3s ease;}
+.level-option input[type="radio"]:checked + label .level-icon {background: rgba(255, 255, 255, 0.2);}
+.level-icon .material-icons {font-size: 1.8rem;color: var(--primary-color);}
+.level-option input[type="radio"]:checked + label .level-icon .material-icons {color: white;}
+.level-info {flex: 1;}
+.level-info h3 {font-family: "Poppins", sans-serif;font-size: 1.25rem;font-weight: 600;margin-bottom: 0.25rem;}
+.level-info span {color: var(--text-secondary);font-size: 0.9rem;font-weight: 500;}
+.level-option input[type="radio"]:checked + label .level-info span {color: rgba(255, 255, 255, 0.8);}
+.level-description {font-size: 0.85rem;color: var(--text-light);margin-top: 0.25rem;}
+.level-option input[type="radio"]:checked + label .level-description {color: rgba(255, 255, 255, 0.7);}
+.level-stats {display: flex;flex-direction: column;gap: 0.5rem;}
+.stat {display: flex;align-items: center;gap: 0.5rem;font-size: 0.9rem;color: var(--text-secondary);}
+.level-option input[type="radio"]:checked + label .stat {color: rgba(255, 255, 255, 0.8);}
+.stat .material-icons {font-size: 1.2rem;}
+.start-button {width: 100%;padding: 1rem 2rem;background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);color: white;border: none;border-radius: var(--radius-xl);font-size: 1.1rem;font-weight: 600;cursor: pointer;transition: all 0.3s ease;display: flex;align-items: center;justify-content: center;gap: 0.5rem;box-shadow: var(--shadow-md);}
+.start-button:hover {transform: translateY(-2px);box-shadow: var(--shadow-lg);background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);}
+.game-section {display: none;max-width: 800px;margin: 0 auto;}
+.game-header {display: flex;justify-content: space-between;align-items: center;margin-bottom: 2rem;flex-wrap: wrap;gap: 1rem;}
+.progress-container {flex: 1;min-width: 200px;}
+.progress-bar {width: 100%;height: 8px;background: var(--bg-tertiary);border-radius: var(--radius-sm);overflow: hidden;margin-bottom: 0.5rem;}
+.progress-fill {height: 100%;background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-light) 100%);border-radius: var(--radius-sm);transition: width 0.3s ease;width: 10%;}
+.progress-text {font-size: 0.9rem;color: var(--text-secondary);font-weight: 500;}
+.game-stats {display: flex;gap: 1rem;}
+.stat-item {display: flex;align-items: center;gap: 0.75rem;padding: 0.75rem 1rem;background: var(--bg-secondary);border-radius: var(--radius-lg);border: 1px solid var(--border-color);}
+.stat-item .material-icons {font-size: 1.5rem;color: var(--primary-color);}
+.stat-info {display: flex;flex-direction: column;}
+.stat-value {font-size: 1.25rem;font-weight: 700;color: var(--text-primary);}
+.stat-label {font-size: 0.75rem;color: var(--text-secondary);text-transform: uppercase;letter-spacing: 0.05em;}
+.timer-stat {position: relative;}
+.timer-ring {position: absolute;top: -5px;right: -5px;width: 50px;height: 50px;}
+.timer-svg {width: 100%;height: 100%;transform: rotate(-90deg);}
+.timer-circle-bg {fill: none;stroke: var(--bg-tertiary);stroke-width: 4;}
+.timer-circle {fill: none;stroke: var(--primary-color);stroke-width: 4;stroke-linecap: round;stroke-dasharray: 283;stroke-dashoffset: 283;transition: stroke-dashoffset 1s linear;}
+.word-display-container {text-align: center;margin-bottom: 2rem;}
+.word-card {background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);border: 2px solid var(--border-color);border-radius: var(--radius-2xl);padding: 2rem;margin-bottom: 1rem;transition: all 0.3s ease;}
+.word-label {font-size: 1rem;color: var(--text-secondary);margin-bottom: 1rem;font-weight: 500;}
+.word-text {font-family: "Poppins", sans-serif;font-size: 2.5rem;font-weight: 700;color: var(--text-primary);margin-bottom: 0.5rem;letter-spacing: -0.02em;}
+.word-pronunciation {font-size: 1rem;color: var(--text-light);font-style: italic;}
+.choices-container {display: grid;grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));gap: 1rem;margin-bottom: 2rem;}
+.choice-btn {padding: 1.25rem 1.5rem;background: var(--bg-primary);border: 2px solid var(--border-color);border-radius: var(--radius-xl);font-size: 1.1rem;font-weight: 500;color: var(--text-primary);cursor: pointer;transition: all 0.3s ease;text-align: left;position: relative;overflow: hidden;}
+.choice-btn:hover {border-color: var(--primary-color);transform: translateY(-2px);box-shadow: var(--shadow-md);}
+.choice-btn:disabled {cursor: not-allowed;opacity: 0.7;}
+.feedback-message {text-align: center;min-height: 2rem;font-size: 1.1rem;font-weight: 600;display: flex;align-items: center;justify-content: center;gap: 0.5rem;}
+.feedback-message.correct {color: var(--success-color);}
+.feedback-message.wrong {color: var(--error-color);}
+.game-over {display: none;max-width: 600px;margin: 0 auto;text-align: center;}
+.result-header {margin-bottom: 2rem;}
+.result-icon {width: 100px;height: 100px;margin: 0 auto 1rem auto;background: linear-gradient(135deg, var(--secondary-color) 0%, #f59e0b 100%);border-radius: 50%;display: flex;align-items: center;justify-content: center;animation: bounce 1s ease-out;}
+.result-icon .material-icons {font-size: 3rem;color: white;}
+.result-header h2 {font-family: "Poppins", sans-serif;font-size: 2rem;font-weight: 700;color: var(--text-primary);margin-bottom: 1rem;}
+.final-score {font-size: 1.25rem;color: var(--text-secondary);line-height: 1.6;}
+.performance-chart {display: flex;gap: 2rem;margin-bottom: 2rem;justify-content: center;}
+.chart-item {flex: 1;max-width: 150px;}
+.chart-bar {height: 120px;width: 40px;background: var(--bg-tertiary);border-radius: var(--radius-lg);margin: 0 auto 1rem auto;position: relative;overflow: hidden;}
+.chart-fill {position: absolute;bottom: 0;width: 100%;border-radius: var(--radius-lg);transition: height 1s ease-out;height: 0%;}
+.chart-item.correct .chart-fill {background: linear-gradient(180deg, var(--success-color) 0%, #059669 100%);}
+.chart-item.wrong .chart-fill {background: linear-gradient(180deg, var(--error-color) 0%, #dc2626 100%);}
+.chart-label {display: flex;flex-direction: column;align-items: center;gap: 0.25rem;font-size: 0.9rem;color: var(--text-secondary);}
+.chart-label .material-icons {font-size: 1.5rem;}
+.chart-item.correct .chart-label .material-icons {color: var(--success-color);}
+.chart-item.wrong .chart-label .material-icons {color: var(--error-color);}
+.wrong-summary {background: var(--bg-secondary);border-radius: var(--radius-xl);padding: 1.5rem;margin-bottom: 2rem;text-align: left;max-height: 300px;overflow-y: auto;}
+.action-buttons {display: flex;gap: 1rem;justify-content: center;}
+.primary-button, .secondary-button {padding: 0.75rem 1.5rem;border-radius: var(--radius-lg);font-size: 1rem;font-weight: 600;cursor: pointer;transition: all 0.3s ease;display: flex;align-items: center;gap: 0.5rem;border: none;}
+.primary-button {background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);color: white;box-shadow: var(--shadow-md);}
+.primary-button:hover {transform: translateY(-2px);box-shadow: var(--shadow-lg);}
+.secondary-button {background: var(--bg-primary);color: var(--text-primary);border: 2px solid var(--border-color);}
+.secondary-button:hover {border-color: var(--primary-color);transform: translateY(-2px);box-shadow: var(--shadow-md);}
+@keyframes slideInDown {from {opacity: 0;transform: translateY(-30px);}to {opacity: 1;transform: translateY(0);}}
+@keyframes slideInUp {from {opacity: 0;transform: translateY(30px);}to {opacity: 1;transform: translateY(0);}}
+@keyframes bounce {0%, 20%, 53%, 80%, 100% {transform: translate3d(0, 0, 0);}40%, 43% {transform: translate3d(0, -30px, 0);}70% {transform: translate3d(0, -15px, 0);}90% {transform: translate3d(0, -4px, 0);}}
+@media (max-width: 768px) {.container {padding: 1rem;}.title-group h1 {font-size: 2.5rem;}.modern-card {padding: 1.5rem;}.game-header {flex-direction: column;align-items: stretch;}.word-text {font-size: 2rem;}.choices-container {grid-template-columns: 1fr;}.action-buttons {flex-direction: column;}}
+  </style>
+</head>
+<body>
+  <!-- Background -->
+  <div class="background-animation">
+    <div class="floating-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+      <div class="shape shape-4"></div>
+      <div class="shape shape-5"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="main-header">
+      <div class="logo-container">
+        <div class="logo-icon">
+          <span class="material-icons">psychology</span>
+        </div>
+        <div class="title-group">
+          <h1>VocabBlitz</h1>
+          <p>Master Words at Lightning Speed</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Level Selection -->
+    <div class="level-select modern-card" id="levelSelect">
+      <div class="card-header">
+        <h2>Choose Your Challenge</h2>
+        <p>Select your skill level to begin</p>
+      </div>
+
+      <div class="level-options">
+        <div class="level-option" data-level="A1-A2">
+          <input type="radio" id="level-beginner" name="level" value="A1-A2" checked>
+          <label for="level-beginner">
+            <div class="level-icon">
+              <span class="material-icons">school</span>
+            </div>
+            <div class="level-info">
+              <h3>Beginner</h3>
+              <span>A1-A2 Level</span>
+              <div class="level-description">Basic everyday words</div>
+            </div>
+            <div class="level-stats">
+              <div class="stat">
+                <span class="material-icons">timer</span>
+                <span>7s</span>
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <div class="level-option" data-level="B1-B2">
+          <input type="radio" id="level-intermediate" name="level" value="B1-B2">
+          <label for="level-intermediate">
+            <div class="level-icon">
+              <span class="material-icons">trending_up</span>
+            </div>
+            <div class="level-info">
+              <h3>Intermediate</h3>
+              <span>B1-B2 Level</span>
+              <div class="level-description">Complex vocabulary</div>
+            </div>
+            <div class="level-stats">
+              <div class="stat">
+                <span class="material-icons">timer</span>
+                <span>5s</span>
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <div class="level-option" data-level="C1-C2">
+          <input type="radio" id="level-advanced" name="level" value="C1-C2">
+          <label for="level-advanced">
+            <div class="level-icon">
+              <span class="material-icons">military_tech</span>
+            </div>
+            <div class="level-info">
+              <h3>Advanced</h3>
+              <span>C1-C2 Level</span>
+              <div class="level-description">Professional terms</div>
+            </div>
+            <div class="level-stats">
+              <div class="stat">
+                <span class="material-icons">timer</span>
+                <span>4s</span>
+              </div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <button class="start-button" id="startGame">
+        <span class="material-icons">play_arrow</span>
+        Start Challenge
+      </button>
+    </div>
+
+    <!-- Game Section -->
+    <section class="game-section modern-card" id="gameSection">
+      <!-- Progress & Stats -->
+      <div class="game-header">
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-text">
+            <span id="questionNum">1</span> / <span id="totalQuestions">10</span>
+          </div>
+        </div>
+
+        <div class="game-stats">
+          <div class="stat-item score-stat">
+            <span class="material-icons">stars</span>
+            <div class="stat-info">
+              <span class="stat-value" id="score">0</span>
+              <span class="stat-label">Score</span>
+            </div>
+          </div>
+
+          <div class="stat-item timer-stat">
+            <span class="material-icons">schedule</span>
+            <div class="stat-info">
+              <span class="stat-value" id="time">0</span>
+              <span class="stat-label">Time</span>
+            </div>
+            <div class="timer-ring" id="timerRing">
+              <svg class="timer-svg" viewBox="0 0 100 100">
+                <circle class="timer-circle-bg" cx="50" cy="50" r="45"></circle>
+                <circle class="timer-circle" cx="50" cy="50" r="45" id="timerCircle"></circle>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Word Area -->
+      <div class="word-display-container">
+        <div class="word-card">
+          <div class="word-label">Translate this word:</div>
+          <div class="word-text" id="wordDisplay"></div>
+          <div class="word-pronunciation" id="wordPronunciation"></div>
+        </div>
+      </div>
+
+      <div class="choices-container" id="choices"></div>
+      <div class="feedback-message" id="message"></div>
+    </section>
+
+    <!-- Game Over -->
+    <div class="game-over modern-card" id="gameOver">
+      <div class="result-header">
+        <div class="result-icon" id="resultIcon">
+          <span class="material-icons">emoji_events</span>
+        </div>
+        <h2 id="resultTitle">Challenge Complete!</h2>
+        <div class="final-score" id="finalScore"></div>
+      </div>
+
+      <div class="performance-chart">
+        <div class="chart-item correct">
+          <div class="chart-bar">
+            <div class="chart-fill" id="correctBar"></div>
+          </div>
+          <div class="chart-label">
+            <span class="material-icons">check_circle</span>
+            <span>Correct</span>
+            <span id="correctCount">0</span>
+          </div>
+        </div>
+
+        <div class="chart-item wrong">
+          <div class="chart-bar">
+            <div class="chart-fill" id="wrongBar"></div>
+          </div>
+          <div class="chart-label">
+            <span class="material-icons">cancel</span>
+            <span>Wrong</span>
+            <span id="wrongCount">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrong-summary" id="wrongSummary"></div>
+
+      <div class="action-buttons">
+        <a class="secondary-button" href="/"><span class="material-icons">home</span>Home</a>
+        <button class="primary-button" id="playAgain">
+          <span class="material-icons">refresh</span>
+          Play Again
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Particles -->
+  <div class="floating-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
+  <script>
+// VocabBlitz - Kelime Eşleştirme Oyunu
+document.addEventListener("DOMContentLoaded", () => {
+  // Kelime havuzları
+  const wordPools = {
+    "A1-A2": [
+      { en: "cat", tr: "kedi" },
+      { en: "dog", tr: "köpek" },
+      { en: "house", tr: "ev" },
+      { en: "book", tr: "kitap" },
+      { en: "car", tr: "araba" },
+      { en: "water", tr: "su" },
+      { en: "apple", tr: "elma" },
+      { en: "school", tr: "okul" },
+      { en: "sun", tr: "güneş" },
+      { en: "table", tr: "masa" },
+      { en: "chair", tr: "sandalye" },
+      { en: "pen", tr: "kalem" },
+      { en: "window", tr: "pencere" },
+      { en: "door", tr: "kapı" },
+      { en: "milk", tr: "süt" },
+      { en: "bread", tr: "ekmek" },
+      { en: "tree", tr: "ağaç" },
+      { en: "bird", tr: "kuş" },
+      { en: "fish", tr: "balık" },
+      { en: "flower", tr: "çiçek" }
+    ],
+    "B1-B2": [
+      { en: "challenge", tr: "meydan okuma" },
+      { en: "improve", tr: "geliştirmek" },
+      { en: "solution", tr: "çözüm" },
+      { en: "opinion", tr: "görüş" },
+      { en: "environment", tr: "çevre" },
+      { en: "opportunity", tr: "fırsat" },
+      { en: "responsible", tr: "sorumlu" },
+      { en: "experience", tr: "deneyim" },
+      { en: "decision", tr: "karar" },
+      { en: "support", tr: "destek" },
+      { en: "community", tr: "topluluk" },
+      { en: "increase", tr: "artırmak" },
+      { en: "reduce", tr: "azaltmak" },
+      { en: "require", tr: "gerektirmek" },
+      { en: "suggestion", tr: "öneri" },
+      { en: "achievement", tr: "başarı" },
+      { en: "attend", tr: "katılmak" },
+      { en: "compare", tr: "karşılaştırmak" },
+      { en: "describe", tr: "tanımlamak" },
+      { en: "prepare", tr: "hazırlamak" }
+    ],
+    "C1-C2": [
+      { en: "comprehensive", tr: "kapsamlı" },
+      { en: "subsequently", tr: "sonradan" },
+      { en: "predominantly", tr: "çoğunlukla" },
+      { en: "contemplate", tr: "düşünüp taşınmak" },
+      { en: "perceive", tr: "algılamak" },
+      { en: "convey", tr: "iletmek" },
+      { en: "detrimental", tr: "zararlı" },
+      { en: "inadvertently", tr: "yanlışlıkla" },
+      { en: "meticulous", tr: "titiz" },
+      { en: "notion", tr: "kavram" },
+      { en: "prevalent", tr: "yaygın" },
+      { en: "scrutiny", tr: "inceleme" },
+      { en: "substantiate", tr: "kanıtlamak" },
+      { en: "ubiquitous", tr: "her yerde bulunan" },
+      { en: "vindicate", tr: "aklamak" },
+      { en: "alleviate", tr: "hafifletmek" },
+      { en: "conspicuous", tr: "göze çarpan" },
+      { en: "elaborate", tr: "ayrıntılı" },
+      { en: "facetious", tr: "nükteli" },
+      { en: "meticulous", tr: "titiz" }
+    ]
+  }
+
+  // Oyun durumu
+  let gameState = {
+    level: null,
+    words: [],
+    currentIndex: 0,
+    score: 0,
+    correctAnswers: 0,
+    wrongAnswers: 0,
+    totalQuestions: 10,
+    timeLeft: 0,
+    maxTime: 0,
+    timer: null,
+    canAnswer: true
+  }
+
+  // DOM elementleri
+  const levelSelect = document.getElementById("levelSelect")
+  const gameSection = document.getElementById("gameSection")
+  const gameOver = document.getElementById("gameOver")
+  const startGameBtn = document.getElementById("startGame")
+  const playAgain = document.getElementById("playAgain")
+  
+  const wordDisplay = document.getElementById("wordDisplay")
+  const choicesDiv = document.getElementById("choices")
+  const scoreSpan = document.getElementById("score")
+  const questionNumSpan = document.getElementById("questionNum")
+  const timeSpan = document.getElementById("time")
+  const message = document.getElementById("message")
+  const progressFill = document.getElementById("progressFill")
+  const timerCircle = document.getElementById("timerCircle")
+  
+  const finalScore = document.getElementById("finalScore")
+  const correctBar = document.getElementById("correctBar")
+  const wrongBar = document.getElementById("wrongBar")
+  const correctCount = document.getElementById("correctCount")
+  const wrongCount = document.getElementById("wrongCount")
+  const resultIcon = document.getElementById("resultIcon")
+  const resultTitle = document.getElementById("resultTitle")
+  const wrongSummary = document.getElementById("wrongSummary")
+
+  // Yardımcı fonksiyonlar
+  function shuffle(array) {
+    const newArray = [...array]
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]]
+    }
+    return newArray
+  }
+
+  function getTimeForLevel(level) {
+    switch(level) {
+      case "A1-A2": return 7
+      case "B1-B2": return 5
+      case "C1-C2": return 4
+      default: return 5
+    }
+  }
+
+  function updateProgress() {
+    const progress = (gameState.currentIndex / gameState.totalQuestions) * 100
+    if (progressFill) progressFill.style.width = `${progress}%`
+    if (questionNumSpan) questionNumSpan.textContent = gameState.currentIndex + 1
+  }
+
+  function updateTimer() {
+    if (timerCircle) {
+      const progress = gameState.timeLeft / gameState.maxTime
+      const circumference = 2 * Math.PI * 45
+      const offset = circumference * (1 - progress)
+      timerCircle.style.strokeDashoffset = offset
+    }
+  }
+
+  function updateUI() {
+    if (scoreSpan) scoreSpan.textContent = gameState.score
+    if (timeSpan) timeSpan.textContent = gameState.timeLeft
+    updateProgress()
+    updateTimer()
+  }
+
+  // Oyun fonksiyonları
+  function startGame() {
+    const selectedLevel = document.querySelector('input[name="level"]:checked')?.value
+    if (!selectedLevel) return
+
+    // Oyun durumunu sıfırla
+    gameState = {
+      level: selectedLevel,
+      words: shuffle(wordPools[selectedLevel]).slice(0, 10),
+      currentIndex: 0,
+      score: 0,
+      correctAnswers: 0,
+      wrongAnswers: 0,
+      totalQuestions: 10,
+      timeLeft: 0,
+      maxTime: getTimeForLevel(selectedLevel),
+      timer: null,
+      canAnswer: true
+    }
+
+    // Ekranları değiştir
+    if (levelSelect) levelSelect.style.display = "none"
+    if (gameSection) gameSection.style.display = "block"
+    if (gameOver) gameOver.style.display = "none"
+
+    // İlk soruyu başlat
+    nextQuestion()
+  }
+
+  function nextQuestion() {
+    if (gameState.currentIndex >= gameState.totalQuestions) {
+      endGame()
+      return
+    }
+
+    gameState.canAnswer = true
+    gameState.timeLeft = gameState.maxTime
+
+    // Mevcut kelimeyi al
+    const currentWord = gameState.words[gameState.currentIndex]
+    if (wordDisplay) wordDisplay.textContent = currentWord.en
+
+    // Seçenekleri oluştur
+    createChoices(currentWord)
+
+    // UI'ı güncelle
+    updateUI()
+    if (message) {
+      message.textContent = ""
+      message.className = "feedback-message"
+    }
+
+    // Timer'ı başlat
+    startTimer()
+  }
+
+  function createChoices(currentWord) {
+    if (!choicesDiv) return
+
+    // Yanlış seçenekleri al
+    const wrongChoices = shuffle(
+      wordPools[gameState.level].filter(word => word.tr !== currentWord.tr)
+    ).slice(0, 3)
+
+    // Tüm seçenekleri karıştır
+    const allChoices = shuffle([
+      { text: currentWord.tr, correct: true },
+      ...wrongChoices.map(word => ({ text: word.tr, correct: false }))
+    ])
+
+    // Seçenekleri oluştur
+    choicesDiv.innerHTML = ""
+    allChoices.forEach((choice, index) => {
+      const button = document.createElement("button")
+      button.className = "choice-btn"
+      button.textContent = choice.text
+      button.onclick = () => selectChoice(choice.correct, button, currentWord.tr)
+      choicesDiv.appendChild(button)
+    })
+  }
+
+  function startTimer() {
+    clearInterval(gameState.timer)
+    gameState.timer = setInterval(() => {
+      gameState.timeLeft--
+      updateUI()
+
+      if (gameState.timeLeft <= 0) {
+        clearInterval(gameState.timer)
+        if (gameState.canAnswer) {
+          handleTimeout()
+        }
+      }
+    }, 1000)
+  }
+
+  function selectChoice(isCorrect, buttonElement, correctAnswer) {
+    if (!gameState.canAnswer) return
+
+    gameState.canAnswer = false
+    clearInterval(gameState.timer)
+
+    // Tüm butonları devre dışı bırak
+    const buttons = choicesDiv.querySelectorAll(".choice-btn")
+    buttons.forEach(btn => btn.disabled = true)
+
+    if (isCorrect) {
+      gameState.score += 10
+      gameState.correctAnswers++
+      buttonElement.style.backgroundColor = "#4CAF50"
+      buttonElement.style.color = "white"
+      if (message) {
+        message.textContent = "Correct! 🎉"
+        message.className = "feedback-message correct"
+        message.style.color = "#4CAF50"
+      }
+    } else {
+      gameState.wrongAnswers++
+      buttonElement.style.backgroundColor = "#f44336"
+      buttonElement.style.color = "white"
+      // Doğru cevabı göster
+      buttons.forEach(btn => {
+        if (btn.textContent === correctAnswer) {
+          btn.style.backgroundColor = "#4CAF50"
+          btn.style.color = "white"
+        }
+      })
+      if (message) {
+        message.textContent = `Wrong! Correct answer: ${correctAnswer}`
+        message.className = "feedback-message wrong"
+        message.style.color = "#f44336"
+      }
+    }
+
+    updateUI()
+
+    // Sonraki soruya geç
+    setTimeout(() => {
+      gameState.currentIndex++
+      nextQuestion()
+    }, 1500)
+  }
+
+  function handleTimeout() {
+    gameState.canAnswer = false
+    gameState.wrongAnswers++
+
+    const correctAnswer = gameState.words[gameState.currentIndex].tr
+
+    // Doğru cevabı göster
+    const buttons = choicesDiv.querySelectorAll(".choice-btn")
+    buttons.forEach(btn => {
+      btn.disabled = true
+      if (btn.textContent === correctAnswer) {
+        btn.style.backgroundColor = "#4CAF50"
+        btn.style.color = "white"
+      }
+    })
+
+    if (message) {
+      message.textContent = `Time's up! Correct answer: ${correctAnswer}`
+      message.className = "feedback-message wrong"
+      message.style.color = "#f44336"
+    }
+
+    setTimeout(() => {
+      gameState.currentIndex++
+      nextQuestion()
+    }, 1500)
+  }
+
+  function endGame() {
+    clearInterval(gameState.timer)
+
+    // Ekranları değiştir
+    if (gameSection) gameSection.style.display = "none"
+    if (gameOver) gameOver.style.display = "block"
+
+    // Sonuçları hesapla
+    const accuracy = Math.round((gameState.correctAnswers / gameState.totalQuestions) * 100)
+
+    // Sonuç ikonunu ve başlığını ayarla
+    if (resultIcon && resultTitle) {
+      if (accuracy >= 80) {
+        resultIcon.innerHTML = '<span class="material-icons">emoji_events</span>'
+        resultTitle.textContent = "Excellent Work!"
+      } else if (accuracy >= 60) {
+        resultIcon.innerHTML = '<span class="material-icons">thumb_up</span>'
+        resultTitle.textContent = "Good Job!"
+      } else {
+        resultIcon.innerHTML = '<span class="material-icons">school</span>'
+        resultTitle.textContent = "Keep Practicing!"
+      }
+    }
+
+    // Final skorunu göster
+    if (finalScore) {
+      finalScore.innerHTML = `
+        <div style="font-size: 1.5rem; font-weight: 700; color: #3b82f6; margin-bottom: 0.5rem;">
+          ${accuracy}% Accuracy
+        </div>
+        <div>Score: <strong>${gameState.score}</strong> / ${gameState.totalQuestions * 10}</div>
+      `
+    }
+
+    // Grafikleri güncelle
+    if (correctCount) correctCount.textContent = gameState.correctAnswers
+    if (wrongCount) wrongCount.textContent = gameState.wrongAnswers
+
+    setTimeout(() => {
+      const correctPercentage = (gameState.correctAnswers / gameState.totalQuestions) * 100
+      const wrongPercentage = (gameState.wrongAnswers / gameState.totalQuestions) * 100
+      
+      if (correctBar) correctBar.style.height = `${correctPercentage}%`
+      if (wrongBar) wrongBar.style.height = `${wrongPercentage}%`
+    }, 500)
+
+    // Hata özetini göster
+    if (wrongSummary) {
+      if (gameState.wrongAnswers === 0) {
+        wrongSummary.innerHTML = `
+          <div style="text-align: center; color: #4CAF50; font-weight: 600;">
+            🎉 Perfect Score! All answers were correct!
+          </div>
+        `
+      } else {
+        wrongSummary.innerHTML = `
+          <h3>Review Your Performance</h3>
+          <p>You got ${gameState.correctAnswers} out of ${gameState.totalQuestions} questions correct!</p>
+        `
+      }
+    }
+  }
+
+  function resetGame() {
+    clearInterval(gameState.timer)
+    
+    // Ekranları sıfırla
+    if (levelSelect) levelSelect.style.display = "block"
+    if (gameSection) gameSection.style.display = "none"
+    if (gameOver) gameOver.style.display = "none"
+
+    // Progress bar'ı sıfırla
+    if (progressFill) progressFill.style.width = "0%"
+    if (correctBar) correctBar.style.height = "0%"
+    if (wrongBar) wrongBar.style.height = "0%"
+  }
+
+  // Event listener'lar
+  if (startGameBtn) {
+    startGameBtn.addEventListener("click", startGame)
+  }
+
+  if (playAgain) {
+    playAgain.addEventListener("click", resetGame)
+  }
+
+  // Başlangıç durumu
+  resetGame()
+})
+  </script>
+</body>
+</html>

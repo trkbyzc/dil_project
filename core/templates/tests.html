@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+
+{% block title %}Testler - İngilizce Öğrenme Platformu{% endblock %}
+
+{% block content %}
+<div class="header">
+    <div>
+        <h1 class="page-title">Testler</h1>
+        <p class="page-subtitle">İngilizce seviyenizi test edin ve gelişiminizi takip edin</p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px;">
+    <!-- Seviye Testi -->
+    <div class="main-card">
+        <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <i class="fas fa-brain"></i>
+            </div>
+            <div class="card-title">Seviye Testi</div>
+        </div>
+        <p style="color: #64748b; margin-bottom: 20px;">
+            Mevcut İngilizce seviyenizi belirlemek için kapsamlı bir test çözün. 
+            Sonuçlara göre kişiselleştirilmiş öğrenme planı oluşturulur.
+        </p>
+        <div style="display: flex; gap: 10px;">
+            <a href="{% url 'placement' %}" class="btn btn-primary">
+                <i class="fas fa-play"></i>
+                Teste Başla
+            </a>
+            <div class="btn btn-secondary">
+                <i class="fas fa-clock"></i>
+                ~15 dakika
+            </div>
+        </div>
+    </div>
+
+    <!-- Kelime Testi -->
+    <div class="main-card">
+        <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                <i class="fas fa-book"></i>
+            </div>
+            <div class="card-title">Kelime Testi</div>
+        </div>
+        <p style="color: #64748b; margin-bottom: 20px;">
+            Kelime dağarcığınızı test edin ve yeni kelimeler öğrenin. 
+            Farklı kategorilerde kelime testleri mevcuttur.
+        </p>
+        <div style="display: flex; gap: 10px;">
+            <a href="#" class="btn btn-primary">
+                <i class="fas fa-play"></i>
+                Teste Başla
+            </a>
+            <div class="btn btn-secondary">
+                <i class="fas fa-clock"></i>
+                ~10 dakika
+            </div>
+        </div>
+    </div>
+
+    <!-- Gramer Testi -->
+    <div class="main-card">
+        <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                <i class="fas fa-language"></i>
+            </div>
+            <div class="card-title">Gramer Testi</div>
+        </div>
+        <p style="color: #64748b; margin-bottom: 20px;">
+            İngilizce gramer kurallarını test edin. 
+            Zamanlar, yapılar ve cümle kurulumları hakkında sorular.
+        </p>
+        <div style="display: flex; gap: 10px;">
+            <a href="#" class="btn btn-primary">
+                <i class="fas fa-play"></i>
+                Teste Başla
+            </a>
+            <div class="btn btn-secondary">
+                <i class="fas fa-clock"></i>
+                ~12 dakika
+            </div>
+        </div>
+    </div>
+
+    <!-- Telaffuz Testi -->
+    <div class="main-card">
+        <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                <i class="fas fa-microphone"></i>
+            </div>
+            <div class="card-title">Telaffuz Testi</div>
+        </div>
+        <p style="color: #64748b; margin-bottom: 20px;">
+            Telaffuz becerilerinizi test edin ve sesli pratik yapın. 
+            Doğru telaffuz için geri bildirim alın.
+        </p>
+        <div style="display: flex; gap: 10px;">
+            <a href="#" class="btn btn-primary">
+                <i class="fas fa-play"></i>
+                Teste Başla
+            </a>
+            <div class="btn btn-secondary">
+                <i class="fas fa-clock"></i>
+                ~8 dakika
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Test Sonuçları -->
+<div style="margin-top: 40px;">
+    <h3 style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 20px;">Son Test Sonuçlarınız</h3>
+    
+    {% if user.testresult_set.all %}
+    <div class="stats-grid">
+        {% for result in user.testresult_set.all|slice:":4" %}
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="fas fa-clipboard-check"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Test Sonucu</div>
+                    <div class="stat-value">{{ result.score }}/{{ result.total }}</div>
+                    <div class="stat-change positive">{{ result.date_taken|date:"d.m.Y" }}</div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="main-card">
+        <div style="text-align: center; padding: 40px;">
+            <i class="fas fa-clipboard-list" style="font-size: 48px; color: #64748b; margin-bottom: 20px;"></i>
+            <h4 style="color: #64748b; margin-bottom: 10px;">Henüz test sonucunuz yok</h4>
+            <p style="color: #94a3b8;">İlk testinizi çözerek başlayın!</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Test İstatistikleri -->
+<div style="margin-top: 40px;">
+    <h3 style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 20px;">Test İstatistikleriniz</h3>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Toplam Test</div>
+                    <div class="stat-value">{{ user.testresult_set.count|default:"0" }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Ortalama Başarı</div>
+                    <div class="stat-value">
+                        {% if user.testresult_set.all %}
+                            {% widthratio user.testresult_set.all|length 1 100 %}%
+                        {% else %}
+                            0%
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div>
+                    <div class="stat-title">En Yüksek Skor</div>
+                    <div class="stat-value">
+                        {% if user.testresult_set.all %}
+                            {% with highest_score=user.testresult_set.all|slice:":1" %}
+                                {% for result in highest_score %}
+                                    {{ result.score }}
+                                {% endfor %}
+                            {% endwith %}
+                        {% else %}
+                            0
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                    <i class="fas fa-calendar"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Son Test</div>
+                    <div class="stat-value">
+                        {% if user.testresult_set.all %}
+                            {% with latest_test=user.testresult_set.all|slice:":1" %}
+                                {% for result in latest_test %}
+                                    {{ result.date_taken|date:"d.m" }}
+                                {% endfor %}
+                            {% endwith %}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

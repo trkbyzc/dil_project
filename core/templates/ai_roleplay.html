@@ -1,0 +1,692 @@
+{% extends 'base.html' %}
+
+{% block title %}AI Roleplay - İngilizce Öğrenme Platformu{% endblock %}
+
+{% block content %}
+<div class="header">
+    <div>
+        <h1 class="page-title">AI Roleplay</h1>
+        <p class="page-subtitle">Yapay zeka ile konuşma pratiği yapın ve İngilizce becerilerinizi geliştirin</p>
+    </div>
+</div>
+
+<div class="content-grid">
+    <!-- Sol Taraf - Setup -->
+    <div class="main-card" id="setup-section">
+        <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="card-title">Roleplay Ayarları</div>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            <!-- Seviye Seçimi -->
+            <div>
+                <label style="display: block; font-weight: 600; color: #1e293b; margin-bottom: 10px;">İngilizce Seviyenizi Seçin:</label>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                    <button class="level-btn" data-level="A1" onclick="selectLevel('A1')">
+                        <div style="font-weight: 600; font-size: 18px;">A1</div>
+                        <div style="font-size: 12px; color: #64748b;">Başlangıç</div>
+                    </button>
+                    <button class="level-btn" data-level="A2" onclick="selectLevel('A2')">
+                        <div style="font-weight: 600; font-size: 18px;">A2</div>
+                        <div style="font-size: 12px; color: #64748b;">Temel</div>
+                    </button>
+                    <button class="level-btn" data-level="B1" onclick="selectLevel('B1')">
+                        <div style="font-weight: 600; font-size: 18px;">B1</div>
+                        <div style="font-size: 12px; color: #64748b;">Orta</div>
+                    </button>
+                    <button class="level-btn" data-level="B2" onclick="selectLevel('B2')">
+                        <div style="font-weight: 600; font-size: 18px;">B2</div>
+                        <div style="font-size: 12px; color: #64748b;">Orta Üst</div>
+                    </button>
+                    <button class="level-btn" data-level="C1" onclick="selectLevel('C1')">
+                        <div style="font-weight: 600; font-size: 18px;">C1</div>
+                        <div style="font-size: 12px; color: #64748b;">İleri</div>
+                    </button>
+                    <button class="level-btn" data-level="C2" onclick="selectLevel('C2')">
+                        <div style="font-weight: 600; font-size: 18px;">C2</div>
+                        <div style="font-size: 12px; color: #64748b;">Uzman</div>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Roleplay Konusu -->
+            <div>
+                <label style="display: block; font-weight: 600; color: #1e293b; margin-bottom: 10px;">Roleplay Konusu:</label>
+                <textarea id="roleplay-topic" placeholder="Örnek: Restoranda yemek siparişi verme, otelde rezervasyon yapma, doktora gitme, alışveriş yapma..." style="width: 100%; min-height: 100px; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; resize: vertical;"></textarea>
+        </div>
+        
+            <!-- Başlat Butonu -->
+            <button id="start-roleplay-btn" onclick="startRoleplay()" class="btn btn-primary" style="width: 100%; padding: 15px; font-size: 16px; font-weight: 600;" disabled>
+                <i class="fas fa-play"></i>
+                Roleplay'i Başlat
+            </button>
+        </div>
+    </div>
+
+    <!-- Sağ Taraf - Chat Interface (Initially Hidden) -->
+    <div class="main-card" id="chat-section" style="display: none;">
+        <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                <i class="fas fa-comments"></i>
+            </div>
+            <div class="card-title">AI Roleplay Chat</div>
+            <button onclick="backToSetup()" class="btn btn-secondary" style="margin-left: auto; padding: 8px 16px; font-size: 14px;">
+                <i class="fas fa-arrow-left"></i>
+                Geri
+            </button>
+        </div>
+        
+        <div id="chat-container" style="height: 400px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px; background: #f8fafc;">
+            <div id="chat-messages">
+                <!-- Messages will be added here -->
+            </div>
+                </div>
+        
+        <!-- Voice Only Controls -->
+        <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+            <!-- Voice Control Buttons -->
+            <div style="display: flex; gap: 15px; align-items: center; justify-content: center; width: 100%;">
+                <button id="voice-btn" onclick="requestMicrophonePermission()" class="btn btn-primary" style="padding: 15px 30px; border-radius: 12px; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: none; font-size: 16px; font-weight: 600; min-width: 200px;">
+                    <i class="fas fa-microphone" style="margin-right: 10px; font-size: 18px;"></i>
+                    <span id="voice-btn-text">🎤 Mikrofon İzni Ver</span>
+            </button>
+            
+                <button id="tts-toggle" onclick="toggleTTS()" class="btn btn-secondary" style="padding: 15px 30px; border-radius: 12px; font-size: 16px; font-weight: 600;">
+                    <i class="fas fa-volume-up" style="margin-right: 10px;"></i>
+                    <span id="tts-text">🔊 Ses Açık</span>
+                </button>
+                </div>
+            
+            <!-- Microphone Permission Request -->
+            <div id="mic-permission" style="display: block; padding: 15px; background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; text-align: center; width: 100%; margin-top: 10px;">
+                <i class="fas fa-microphone-slash" style="color: #f59e0b; margin-right: 8px;"></i>
+                <span>Mikrofon izni gerekli. Lütfen yukarıdaki mavi butona basarak izin verin.</span>
+                </div>
+            
+            <!-- Voice Instructions -->
+            <div style="text-align: center; color: #64748b; font-size: 14px;">
+                <p><i class="fas fa-info-circle" style="margin-right: 5px;"></i>Mikrofon butonuna basarak İngilizce konuşun. AI sesli yanıt verecek.</p>
+                </div>
+                </div>
+        
+        <!-- Voice Status -->
+        <div id="voice-status" style="display: none; margin-top: 10px; padding: 10px; background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; text-align: center;">
+            <i class="fas fa-microphone-alt" style="color: #0ea5e9; margin-right: 8px;"></i>
+            <span id="voice-status-text">Dinleniyor... Konuşun!</span>
+        </div>
+    </div>
+</div>
+
+<!-- Konuşma İstatistikleri -->
+<div style="margin-top: 40px;">
+    <h3 style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 20px;">Konuşma İstatistikleriniz</h3>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Toplam Konuşma</div>
+                    <div class="stat-value">12</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Toplam Süre</div>
+                    <div class="stat-value">2s 30dk</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Ortalama Puan</div>
+                    <div class="stat-value">8.5/10</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div>
+                    <div class="stat-title">En İyi Konuşma</div>
+                    <div class="stat-value">9.2/10</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.level-btn {
+    padding: 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.level-btn:hover {
+    border-color: #667eea;
+    background: #f8fafc;
+}
+
+.level-btn.selected {
+    border-color: #667eea;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.level-btn.selected div {
+    color: white !important;
+}
+
+#start-roleplay-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+</style>
+
+<script>
+let selectedLevel = null;
+let roleplayTopic = '';
+let conversationHistory = [];
+
+// Voice recognition variables
+let recognition = null;
+let isListening = false;
+let isVoiceSupported = false;
+let hasMicrophonePermission = false;
+
+// Text-to-speech variables
+let speechSynthesis = window.speechSynthesis;
+let isTTSEnabled = true;
+let currentSpeech = null;
+
+// Initialize speech recognition
+function initSpeechRecognition() {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        isVoiceSupported = true;
+        recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US'; // English language
+        recognition.maxAlternatives = 1;
+        
+        recognition.onstart = function() {
+            console.log('Voice recognition started');
+            isListening = true;
+            updateVoiceButton();
+            showVoiceStatus('🎤 Dinleniyor... İngilizce konuşun!', 'listening');
+        };
+        
+        recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript;
+            console.log('Transcript:', transcript);
+            
+            // Add user message to chat
+            addMessage(transcript, 'user');
+            
+            // Stop listening
+            stopVoiceRecognition();
+            
+            // Send to AI directly
+            sendToGemini(transcript);
+        };
+        
+        recognition.onerror = function(event) {
+            console.error('Speech recognition error:', event.error);
+            stopVoiceRecognition();
+            showVoiceStatus('❌ Hata: ' + event.error, 'error');
+        };
+        
+        recognition.onend = function() {
+            console.log('Voice recognition ended');
+            isListening = false;
+            updateVoiceButton();
+            hideVoiceStatus();
+        };
+    } else {
+        console.log('Speech recognition not supported');
+        isVoiceSupported = false;
+        document.getElementById('voice-btn').style.display = 'none';
+    }
+}
+
+function selectLevel(level) {
+    selectedLevel = level;
+    
+    // Remove previous selection
+    document.querySelectorAll('.level-btn').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    
+    // Add selection to clicked button
+    document.querySelector(`[data-level="${level}"]`).classList.add('selected');
+    
+    checkStartButton();
+}
+
+function checkStartButton() {
+    const topic = document.getElementById('roleplay-topic').value.trim();
+    const startBtn = document.getElementById('start-roleplay-btn');
+    
+    if (selectedLevel && topic) {
+        startBtn.disabled = false;
+    } else {
+        startBtn.disabled = true;
+    }
+}
+
+function startRoleplay() {
+    roleplayTopic = document.getElementById('roleplay-topic').value.trim();
+    
+    if (!selectedLevel || !roleplayTopic) {
+        alert('Lütfen seviye ve roleplay konusunu seçin!');
+        return;
+    }
+    
+    // Hide setup, show chat
+    document.getElementById('setup-section').style.display = 'none';
+    document.getElementById('chat-section').style.display = 'block';
+    
+    // Initialize chat
+    initializeChat();
+}
+
+function backToSetup() {
+    document.getElementById('setup-section').style.display = 'block';
+    document.getElementById('chat-section').style.display = 'none';
+    
+    // Clear chat
+    document.getElementById('chat-messages').innerHTML = '';
+    conversationHistory = [];
+}
+
+function initializeChat() {
+    const welcomeMessage = `We can start!`;
+    addMessage(welcomeMessage, 'ai');
+}
+
+// sendMessage function removed - only voice input is used
+
+function sendToGemini(message) {
+    fetch('/ai-roleplay-chat/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            message: message,
+            level: selectedLevel,
+            topic: roleplayTopic,
+            conversation_history: conversationHistory
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            addMessage(data.response, 'ai');
+        } else {
+            let errorMessage = 'Üzgünüm, bir hata oluştu. Lütfen tekrar deneyin.';
+            
+            if (data.error) {
+                if (data.error.includes('API key')) {
+                    errorMessage = 'Gemini API anahtarı yapılandırılmamış. Lütfen GEMINI_API_KEY environment variable\'ını ayarlayın.';
+                } else if (data.error.includes('Invalid level')) {
+                    errorMessage = 'Geçersiz seviye seçimi. Lütfen sayfayı yenileyin ve tekrar deneyin.';
+                } else if (data.error.includes('Message cannot be empty')) {
+                    errorMessage = 'Mesaj boş olamaz. Lütfen bir mesaj yazın.';
+                } else {
+                    errorMessage = `Hata: ${data.error}`;
+                }
+            }
+            
+            addMessage(errorMessage, 'ai');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        addMessage('Bağlantı hatası. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.', 'ai');
+    });
+}
+
+function addMessage(text, sender) {
+    const chatMessages = document.getElementById('chat-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.style.display = 'flex';
+    messageDiv.style.marginBottom = '15px';
+    messageDiv.style.justifyContent = sender === 'user' ? 'flex-end' : 'flex-start';
+    
+    const iconDiv = document.createElement('div');
+    iconDiv.style.width = '40px';
+    iconDiv.style.height = '40px';
+    iconDiv.style.borderRadius = '50%';
+    iconDiv.style.display = 'flex';
+    iconDiv.style.alignItems = 'center';
+    iconDiv.style.justifyContent = 'center';
+    iconDiv.style.marginRight = '10px';
+    iconDiv.style.background = sender === 'user' ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+    
+    const icon = document.createElement('i');
+    icon.className = sender === 'user' ? 'fas fa-user' : 'fas fa-robot';
+    icon.style.color = 'white';
+    iconDiv.appendChild(icon);
+    
+    const textDiv = document.createElement('div');
+    textDiv.style.background = 'white';
+    textDiv.style.padding = '12px 16px';
+    textDiv.style.borderRadius = '12px';
+    textDiv.style.maxWidth = '70%';
+    textDiv.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+    
+    if (sender === 'ai') {
+        // Convert markdown to HTML for AI messages
+        textDiv.innerHTML = formatMessage(text);
+    } else {
+        // User messages remain as plain text
+        const textP = document.createElement('p');
+        textP.style.margin = '0';
+        textP.style.color = '#1e293b';
+        textP.textContent = text;
+        textDiv.appendChild(textP);
+    }
+    
+    if (sender === 'user') {
+        messageDiv.appendChild(textDiv);
+        messageDiv.appendChild(iconDiv);
+    } else {
+        messageDiv.appendChild(iconDiv);
+        messageDiv.appendChild(textDiv);
+    }
+    
+    chatMessages.appendChild(messageDiv);
+    
+    // Add to conversation history
+    conversationHistory.push({
+        role: sender === 'user' ? 'user' : 'assistant',
+        content: text
+    });
+    
+    // Speak AI responses
+    if (sender === 'ai') {
+        speakText(text);
+    }
+    
+    // Scroll to bottom
+    const chatContainer = document.getElementById('chat-container');
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+function formatMessage(text) {
+    // Convert markdown-style formatting to HTML
+    let formattedText = text;
+    
+    // Bold text: **text** -> <strong>text</strong>
+    formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    
+    // Italic text: *text* -> <em>text</em>
+    formattedText = formattedText.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    
+    // Headers: **Header** -> <h4>Header</h4>
+    formattedText = formattedText.replace(/^\*\*(.*?)\*\*$/gm, '<h4 style="margin: 10px 0 5px 0; color: #1e293b; font-weight: 600;">$1</h4>');
+    
+    // Numbered lists: 1. item -> <ol><li>item</li></ol>
+    formattedText = formattedText.replace(/^\d+\.\s+(.*)$/gm, '<li style="margin: 5px 0; color: #374151;">$1</li>');
+    
+    // Bullet lists: - item -> <ul><li>item</li></ul>
+    formattedText = formattedText.replace(/^[-•]\s+(.*)$/gm, '<li style="margin: 5px 0; color: #374151;">$1</li>');
+    
+    // Wrap lists in proper containers
+    formattedText = formattedText.replace(/(<li.*?<\/li>)/gs, '<ul style="margin: 10px 0; padding-left: 20px;">$1</ul>');
+    
+    // Line breaks
+    formattedText = formattedText.replace(/\n/g, '<br>');
+    
+    // Add default styling
+    formattedText = '<div style="color: #1e293b; line-height: 1.6;">' + formattedText + '</div>';
+    
+    return formattedText;
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Voice recognition functions
+function requestMicrophonePermission() {
+    console.log('Requesting microphone permission...');
+    
+    if (!isVoiceSupported) {
+        alert('Ses tanıma bu tarayıcıda desteklenmiyor.');
+        return;
+    }
+    
+    if (!hasMicrophonePermission) {
+        // Request microphone permission
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(function(stream) {
+                console.log('Microphone permission granted!');
+                hasMicrophonePermission = true;
+                stream.getTracks().forEach(track => track.stop()); // Stop the stream
+                updateVoiceButton();
+                hideMicrophonePermission();
+                addMessage('✅ Mikrofon izni verildi! Şimdi "🎤 Konuş" butonuna basarak konuşmaya başlayabilirsiniz.', 'ai');
+            })
+            .catch(function(err) {
+                console.error('Microphone permission denied:', err);
+                showMicrophonePermission();
+                addMessage('❌ Mikrofon izni reddedildi. Lütfen tarayıcı ayarlarından mikrofon iznini verin.', 'ai');
+            });
+    } else {
+        // Already have permission, toggle voice input
+        if (isListening) {
+            stopVoiceRecognition();
+        } else {
+            startVoiceRecognition();
+        }
+    }
+}
+
+function toggleVoiceInput() {
+    if (!hasMicrophonePermission) {
+        requestMicrophonePermission();
+        return;
+    }
+    
+    if (isListening) {
+        stopVoiceRecognition();
+    } else {
+        startVoiceRecognition();
+    }
+}
+
+function startVoiceRecognition() {
+    if (recognition) {
+        try {
+            recognition.start();
+        } catch (error) {
+            console.error('Error starting voice recognition:', error);
+            showVoiceStatus('Mikrofon başlatılamadı', 'error');
+        }
+    }
+}
+
+function stopVoiceRecognition() {
+    if (recognition && isListening) {
+        recognition.stop();
+    }
+}
+
+function updateVoiceButton() {
+    const voiceBtn = document.getElementById('voice-btn');
+    const voiceBtnText = document.getElementById('voice-btn-text');
+    const voiceIcon = voiceBtn.querySelector('i');
+    
+    console.log('Updating voice button. hasPermission:', hasMicrophonePermission, 'isListening:', isListening);
+    
+    if (!hasMicrophonePermission) {
+        voiceBtn.style.background = 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)';
+        voiceBtn.style.color = 'white';
+        voiceBtnText.textContent = '🎤 Mikrofon İzni Ver';
+        voiceIcon.className = 'fas fa-microphone';
+        showMicrophonePermission();
+    } else if (isListening) {
+        voiceBtn.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+        voiceBtn.style.color = 'white';
+        voiceBtnText.textContent = '⏹️ Durdur';
+        voiceIcon.className = 'fas fa-stop';
+        hideMicrophonePermission();
+    } else {
+        voiceBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+        voiceBtn.style.color = 'white';
+        voiceBtnText.textContent = '🎤 Konuş';
+        voiceIcon.className = 'fas fa-microphone';
+        hideMicrophonePermission();
+    }
+}
+
+function showMicrophonePermission() {
+    document.getElementById('mic-permission').style.display = 'block';
+}
+
+function hideMicrophonePermission() {
+    document.getElementById('mic-permission').style.display = 'none';
+}
+
+function showVoiceStatus(message, type = 'listening') {
+    const statusDiv = document.getElementById('voice-status');
+    const statusText = document.getElementById('voice-status-text');
+    const statusIcon = statusDiv.querySelector('i');
+    
+    statusText.textContent = message;
+    
+    if (type === 'error') {
+        statusDiv.style.background = '#fef2f2';
+        statusDiv.style.borderColor = '#ef4444';
+        statusIcon.style.color = '#ef4444';
+        statusIcon.className = 'fas fa-exclamation-triangle';
+    } else {
+        statusDiv.style.background = '#f0f9ff';
+        statusDiv.style.borderColor = '#0ea5e9';
+        statusIcon.style.color = '#0ea5e9';
+        statusIcon.className = 'fas fa-microphone-alt';
+    }
+    
+    statusDiv.style.display = 'block';
+}
+
+function hideVoiceStatus() {
+    document.getElementById('voice-status').style.display = 'none';
+}
+
+// Text-to-speech functions
+function toggleTTS() {
+    isTTSEnabled = !isTTSEnabled;
+    updateTTSButton();
+    
+    if (!isTTSEnabled && currentSpeech) {
+        speechSynthesis.cancel();
+    }
+}
+
+function updateTTSButton() {
+    const ttsBtn = document.getElementById('tts-toggle');
+    const ttsText = document.getElementById('tts-text');
+    const ttsIcon = ttsBtn.querySelector('i');
+    
+    if (isTTSEnabled) {
+        ttsBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+        ttsBtn.style.color = 'white';
+        ttsText.textContent = 'Ses Açık';
+        ttsIcon.className = 'fas fa-volume-up';
+    } else {
+        ttsBtn.style.background = '';
+        ttsBtn.style.color = '';
+        ttsText.textContent = 'Ses Kapalı';
+        ttsIcon.className = 'fas fa-volume-mute';
+    }
+}
+
+function speakText(text) {
+    if (!isTTSEnabled || !speechSynthesis) return;
+    
+    // Stop any current speech
+    if (currentSpeech) {
+        speechSynthesis.cancel();
+    }
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.9; // Slightly slower for better understanding
+    utterance.pitch = 1.0;
+    utterance.volume = 0.8;
+    
+    // Try to use a female voice for better AI assistant feel
+    const voices = speechSynthesis.getVoices();
+    const femaleVoice = voices.find(voice => 
+        voice.lang.includes('en') && 
+        (voice.name.includes('female') || voice.name.includes('Samantha') || voice.name.includes('Victoria'))
+    );
+    
+    if (femaleVoice) {
+        utterance.voice = femaleVoice;
+    }
+    
+    currentSpeech = utterance;
+    speechSynthesis.speak(utterance);
+    
+    utterance.onend = function() {
+        currentSpeech = null;
+    };
+}
+
+// Event listeners
+document.getElementById('roleplay-topic').addEventListener('input', checkStartButton);
+
+// Initialize speech recognition when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    initSpeechRecognition();
+    updateTTSButton();
+    updateVoiceButton(); // Initialize voice button state
+    
+    // Wait for voices to load
+    if (speechSynthesis) {
+        speechSynthesis.onvoiceschanged = function() {
+            // Voices are now loaded
+        };
+    }
+});
+</script>
+{% endblock %} 
